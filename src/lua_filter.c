@@ -12,7 +12,7 @@ l_my_print (lua_State * L)
 	{
 	  /* Pop the next arg using lua_tostring(L, i) and do your print */
 	  const char *str = lua_tostring (L, lua_gettop (L));
-	  g_print ("%s", str);
+	  printf ("%s", str);
 
 	}
       else
@@ -48,7 +48,8 @@ typedef struct _ControlData
   lua_State *L;
   char *script_preamble;	/// Скрипт, который выполняется один раз, выполняя предварительные действия.
   char *script_code;		/// Скрипт, который выполняется циклически, по каждому тику.
-  GString *result;
+  // GString *result;
+  char *result;
   bool_t stopped; /// Флаг того, что Lua-машина остановлена.
   bool_t preabmle_was_run; /// Флаг того, что преамбула уже была выполнена.
   char padding[6];
@@ -65,7 +66,7 @@ control_init (MSFilter * f)
 {
   ControlData *cd = ms_new0 (ControlData, 1);
   f->data = cd;
-  cd->result = g_string_new ("");
+  cd->result = NULL;
   cd->L = luaL_newstate ();	// Создаем экземпляр виртуальной машины Lua.
   luaL_openlibs (cd->L);	// Загружаем стандартные библиотеку.
   luaopen_luamylib (cd->L);
@@ -78,7 +79,7 @@ control_uninit (MSFilter * f)
   lua_close (cd->L);		// Останавливаем  Lua-машину.
   ms_free (cd->script_code);
   ms_free (cd->script_preamble);
-  g_string_free (cd->result, FALSE);
+  ms_free (cd->result);
   ms_free (cd);
 }
 
@@ -98,12 +99,12 @@ control_process (MSFilter * f)
 	  err = luaL_dostring (d->L, d->script_preamble);
 	  if (err)
 	    {
-	      g_print ("filter <%s> Lua script preamble error.\n",
+	      printf ("filter <%s> Lua script preamble error.\n",
 		       f->desc->name);
 	      const char *answer = lua_tostring (d->L, lua_gettop (d->L));
 	      if (answer)
 		{
-		  g_print ("Error description:<%s>\n", answer);
+		  printf ("Error description:<%s>\n", answer);
 		}
 	    }
 	  else
@@ -120,13 +121,14 @@ control_process (MSFilter * f)
 
   while ((im = ms_queue_get (f->inputs[0])) != NULL)
     {
-      guint16 disabled_out = 0;
+      unsigned int disabled_out = 0;
       if ((!d->stopped) && (d->script_code) && (d->preabmle_was_run))
 	{
-	  gboolean input_empty = ms_queue_empty (f->inputs[0]);
+	  bool_t input_empty = ms_queue_empty (f->inputs[0]);
 	  lua_pushinteger (d->L, (lua_Integer) input_empty);
 	  lua_setglobal (d->L, LUA_FILTER_INPUT_EMPTY);
-      vs_tag* tag = NULL;
+      //vs_tag* tag = NULL;
+	  /*
 	  if (is_vs_tag (im->b_rptr))
 	    {
 	      // Блок данных имеет тег в начале, по тегу выбираем способ, каким
@@ -185,11 +187,12 @@ control_process (MSFilter * f)
 	      lua_pushinteger (d->L, 0);
 	      lua_setglobal (d->L, LUA_FILTER_REMOVE_TAG_CONST);
 	    }
-	  else
+	  else */
 	    {
 	      // Если блок данных не имеет тега.
 	      lua_pushstring (d->L, "");
-	      lua_setglobal (d->L, VS_SRC_TAG_TYPE);
+	  /*   
+		  lua_setglobal (d->L, VS_SRC_TAG_TYPE);
 
 	      lua_pushstring (d->L, "");
 	      lua_setglobal (d->L, VS_SRC_TAG_SUBTYPE);
@@ -200,10 +203,10 @@ control_process (MSFilter * f)
 	      lua_pushinteger (d->L, 0);
 	      lua_setglobal (d->L, LUA_FILTER_SRC_PORT);
 
+*/
 	      size_t sz = (size_t) msgdsize (im);
 	      lua_pushinteger (d->L, (lua_Integer) sz);
 	      lua_setglobal (d->L, LUA_FILTER_DATA_LEN);
-
 	      lua_pushlstring (d->L, (const char *) im->b_rptr, sz);
 	    }
 
@@ -214,11 +217,11 @@ control_process (MSFilter * f)
 
 	  if (err)
 	    {
-	      g_print ("\nFilter <%s> Lua error.\n", f->desc->name);
+	      printf ("\nFilter <%s> Lua error.\n", f->desc->name);
 	      const char *answer = lua_tostring (d->L, lua_gettop (d->L));
 	      if (answer)
 		{
-		  g_print ("Lua error description:<%s>.\n", answer);
+		  printf ("Lua error description:<%s>.\n", answer);
 		}
 	    }
 	  else
@@ -231,44 +234,49 @@ control_process (MSFilter * f)
 
 	      if (lua_type (d->L, lua_gettop (d->L)) == LUA_TSTRING)
 		{
-		  const char *c = lua_tostring (d->L, lua_gettop (d->L));
-		  g_string_assign (d->result, c);
+		  char *c = lua_tostring (d->L, lua_gettop (d->L));
+
+		  d->result = c;
 		}
+		  //d->result = c;
 
 	      lua_pop (d->L, 1);
 	      // top = lua_gettop (d->L);
 	      lua_getglobal (d->L, LUA_FILTER_DATA_OUT);
 	      lua_getglobal (d->L, LUA_FILTER_DATA_OUT_LEN);
-	      lua_getglobal (d->L, LUA_FILTER_SRC_ADDR);
-	      lua_getglobal (d->L, LUA_FILTER_SRC_PORT);
-	      lua_getglobal (d->L, LUA_FILTER_REMOVE_TAG_CONST);
+	      //lua_getglobal (d->L, LUA_FILTER_SRC_ADDR);
+	      //lua_getglobal (d->L, LUA_FILTER_SRC_PORT);
+	      //lua_getglobal (d->L, LUA_FILTER_REMOVE_TAG_CONST);
 	      lua_getglobal (d->L, LUA_FILTER_DISABLE_OUT);
 
 	      // top = lua_gettop (d->L);
 	      if (lua_type (d->L, lua_gettop (d->L)) == LUA_TNUMBER)
 		{		// Извлекаем флаг запрета отправки блока данных.
 		  disabled_out =
-		    (guint16) lua_tointeger (d->L, lua_gettop (d->L));
+		    (unsigned short) lua_tointeger (d->L, lua_gettop (d->L));
 		}
 
 	      lua_pop (d->L, 1);
 	      // top = lua_gettop (d->L);
-	      guint16 remove_tag = 0;
+		  /*
+	     unsigned short remove_tag = 0;
 	      if (lua_type (d->L, lua_gettop (d->L)) == LUA_TNUMBER)
 		{		// Извлекаем флаг использования тега.
 		  remove_tag =
-		    (guint16) lua_tointeger (d->L, lua_gettop (d->L));
+		    (unsigned short) lua_tointeger (d->L, lua_gettop (d->L));
 		}
 
 	      lua_pop (d->L, 1);
 	      if (lua_type (d->L, lua_gettop (d->L)) == LUA_TNUMBER)
 		{		// Извлекаем номер порта.
-		  guint16 port =
-		    (guint16) lua_tointeger (d->L, lua_gettop (d->L));
+		  unsigned short port =
+		    (unsigned short) lua_tointeger (d->L, lua_gettop (d->L));
 		  if (tag)
 		    tag->port = port;
 		}
-
+*/
+	 
+	 /*
 	      // Извлекаем текстовую строку содержащую IP-адрес.
 	      lua_pop (d->L, 1);
 	      if (lua_type (d->L, lua_gettop (d->L)) == LUA_TSTRING)
@@ -283,7 +291,7 @@ control_process (MSFilter * f)
 			       MIN (strlen (new_addr), ETH_ADDR_LEN - 1));
 		  }
 		}
-
+*/
 	      // Извлекаем размер выходного сообщения.
 	      size_t real_size = 0;
 	      lua_pop (d->L, 1);
@@ -304,7 +312,10 @@ control_process (MSFilter * f)
 		  if (msg_body && msg_len)
 		    {
 		      msg_len = real_size;
-		      if (tag)
+		      
+			  
+			 /* 
+			  if (tag)
 			{
 			  if ((!remove_tag))
 			    {
@@ -320,7 +331,7 @@ control_process (MSFilter * f)
 			  memcpy (out_im->b_wptr, msg_body, msg_len);
 			  out_im->b_wptr = out_im->b_wptr + msg_len;
 			}
-		      else
+		      else*/
 			{
 			  out_im = allocb ((int) msg_len, 0);
 			  memcpy (out_im->b_wptr, msg_body, msg_len);
@@ -408,7 +419,7 @@ control_get_result (MSFilter * f, void *arg)
     {
       // Возвращаем ответ скрипта, обрезая все, что длинее SCRIPT_ANSWER_SIZE байт.
       if (d->result)
-	memcpy (arg, d->result->str, d->result->len % SCRIPT_ANSWER_SIZE);
+	memcpy (arg, d->result, strlen(d->result) % SCRIPT_ANSWER_SIZE);
     }
   return 0;
 }

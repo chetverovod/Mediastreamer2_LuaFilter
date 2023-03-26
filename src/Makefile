@@ -15,20 +15,16 @@ endif
 # Информация для добавления в сборку информации о билде.
 GIT_VERSION = "$(shell git describe --abbrev=4 --dirty --always --tags)"
 
-#gcc example1.c -pg -o example1 -O2 -lc
-
-# Должна быть установлена переменная окружения:
-# PKG_CONFIG_PATH=C:/opt/gtk/lib/pkgconfig
 
 #  Нормальная сборка.
- CFLAGS =$(PROCESSOR_OPTIONS)  -v -save-temps  -Wall -ggdb -DGSEAL_ENABLE -DGTK_DISABLE_SINGLE_INCLUDES -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -Wfatal-errors \$(shell pkg-config gmodule-2.0 glib-2.0 gobject-2.0 gio-2.0 gio-unix-2.0 mediastreamer ortp --cflags) -DBUILD_INFO=\"$(GIT_VERSION)\" -Wl,--build-id=none  -Werror
+ CFLAGS =$(PROCESSOR_OPTIONS)  -v -save-temps  -Wall -ggdb -DGSEAL_ENABLE -DGTK_DISABLE_SINGLE_INCLUDES -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -Wfatal-errors \$(shell pkg-config gmodule-2.0 glib-2.0 gobject-2.0 gio-2.0 gio-unix-2.0 mediastreamer ortp lua5.3 --cflags) -DBUILD_INFO=\"$(GIT_VERSION)\" -Wl,--build-id=none  -Werror
 
 
 #  Поиск утечек памяти.
 #CFLAGS =$(PROCESSOR_OPTIONS)  -v -save-temps  -fsanitize=leak -Wall -Wextra -pedantic -O2 -Wshadow -Wformat=2 -Wfloat-equal -Wconversion -Wlogical-op -Wcast-qual -Wcast-align -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -D_FORTIFY_SOURCE=2 -fsanitize=address -fsanitize=undefined -fno-sanitize-recover -fstack-protector -ggdb -DGSEAL_ENABLE -DGTK_DISABLE_SINGLE_INCLUDES -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -Wfatal-errors \$(shell pkg-config gmodule-2.0 glib-2.0 gobject-2.0 gio-2.0 mediastreamer ortp  --cflags) -DBUILD_INFO=\"$(GIT_VERSION)\"
 
 
-$(COV_APP):  CFLAGS =$(PROCESSOR_OPTIONS) -Wall -ggdb -DGSEAL_ENABLE -DGTK_DISABLE_SINGLE_INCLUDES -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -Wfatal-errors  -DCOVERAGE_BUILD --coverage $(shell pkg-config gmodule-2.0 glib-2.0 gobject-2.0 gio-2.0 mediastreamer ortp --cflags) -DBUILD_INFO=\"$(GIT_VERSION)\"
+$(COV_APP):  CFLAGS =$(PROCESSOR_OPTIONS) -Wall -ggdb -DGSEAL_ENABLE -DGTK_DISABLE_SINGLE_INCLUDES -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -Wfatal-errors  -DCOVERAGE_BUILD --coverage $(shell pkg-config gmodule-2.0 glib-2.0 gobject-2.0 gio-2.0 mediastreamer ortp lua5.3 --cflags) -DBUILD_INFO=\"$(GIT_VERSION)\"
 
 CPPFLAGS =$(CFLAGS)
 
@@ -36,18 +32,18 @@ COV_CPPFLAGS =$(CFLAGS)
 
 PROF_CPPFLAGS =$(CFLAGS)
 
-LDLIBS = $(CFLAGS) $(shell  pkg-config  gthread-2.0 gmodule-2.0 glib-2.0 gobject-2.0 gio-2.0 gio-unix-2.0 mediastreamer   --libs) \
+LDLIBS = $(CFLAGS) $(shell  pkg-config  gthread-2.0 gmodule-2.0 glib-2.0 gobject-2.0 gio-2.0 gio-unix-2.0 mediastreamer  ortp lua5.3 --libs) \
   -Xlinker --allow-multiple-definition -lm -v
 
 COV_LDLIBS = --coverage $(LDLIBS) -lgcov 
 PROF_LDLIBS = -pg $(LDLIBS) -O2  -lc 
 resources.o: xrtpcheck.rc
 
-SOURCES.c = lua_filter_demo.c chunker_filter.c app_state.c
+SOURCES.c = lua_filter_demo.c lua_filter.c 
 
-COV_SOURCES.c = lua_filter_demo.c chunker_filter.c app_state.c 
+COV_SOURCES.c = lua_filter_demo.c lua_filter.c 
 
-PROF_SOURCES.c = lua_filter_demo.c chunker_filter.c app_state.c
+PROF_SOURCES.c = lua_filter_demo.c lua_filter.c
 
 
 
