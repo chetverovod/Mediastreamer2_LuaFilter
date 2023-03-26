@@ -20,36 +20,21 @@
 /*----------------------------------------------------------*/
 struct _app_vars
 {
-    //int  local_port;              /* Локальный порт. */
-    //int  remote_port;             /* Порт переговорного устройства на удаленном компьютере. */
-   // char remote_addr[128];        /* IP-адрес удаленного компьютера. */
     MSDtmfGenCustomTone dtmf_cfg; /* Настройки тестового сигнала генератора. */
     MSFilter* recorder;           /* Указатель на фильтр регистратор. */
     bool_t file_is_open;          /* Флаг того, что файл для записи открыт. */
     /* Порог, при котором прекращается запись принимаемого сигнала в файл. */
     float treshold; 
-    bool_t en_rec;                /*Включить запись в файл.*/    
+    bool_t en_rec;          /* Включить запись в файл. */    
     MSFactory *mf;          /* Фабрика фильтров медиастримера. */
 	MSSndCardManager *scm ; /* Менеджер звуковых карт. */
     char cards_count;       /* Количество доступных звуковых карт. */
 	const char **cards;     /* Список доступных звуковых карт. */
+    char* script_name;      /* Файл основного скрипта. */
 };
 
 typedef struct _app_vars app_vars;
 
-/*----------------------------------------------------------*/
-/* Создаем дуплексную RTP-сессию. */
-/*
-RtpSession* create_duplex_rtp_session(app_vars v)
-{
-    RtpSession *session = create_rtpsession (v.local_port, v.local_port + 1,
-            FALSE, RTP_SESSION_SENDRECV);
-    rtp_session_set_remote_addr_and_port(session, v.remote_addr, v.remote_port,
-            v.remote_port + 1);
-    rtp_session_set_send_payload_type(session, PCMU);
-    return session;
-}
-*/
 /*----------------------------------------------------------*/
 /* Функция преобразования аргументов командной строки в 
  * настройки программы. */
@@ -64,7 +49,7 @@ void  scan_args(int argc, char *argv[], app_vars *v)
             printf("  %s walkie talkie\n\n", p);
             printf("--help      List of options.\n");
             printf("--version   Version of application.\n");
-            printf("--addr      Remote abonent IP address string.\n");
+            printf("--scn       Full name of Lua-script.\n");
             printf("--port      Remote abonent port number.\n");
             printf("--lport     Local port number.\n");
             printf("--gen       Generator frequency.\n");
@@ -77,6 +62,12 @@ void  scan_args(int argc, char *argv[], app_vars *v)
         {
             printf("0.1\n");
             exit(0);
+        }
+
+        if (!strcmp(argv[i], "--scn"))
+        {
+            v->script_name = ms_strdup(argv[i+1]);
+            printf("Lua-script_name: %s\n", v->script_name);
         }
 /*
         if (!strcmp(argv[i], "--addr"))
@@ -116,6 +107,30 @@ void  scan_args(int argc, char *argv[], app_vars *v)
         }
     }
 }
+
+/*----------------------------------------------------------------------------*/
+/* Функция загрузки скриптов преамбулы и тела. */
+static void load_script(app_vars *v, MSFilter* filter)
+{
+    if (!v->script_name) return;
+    FILE* f = fopen(v->script_name, "r"); 
+    const size_t body_sz = 1024;
+    char body[body_sz + 1];
+    memset(body, 0, body_sz +1);
+    size_t read_res = fread(body, 1, body_sz, f); 
+    fclose(f);
+    if ((read_res > 0) && (read_res <= body_sz))
+    {
+        printf("Script <%s>: <\n%s\n> will be loaded to lua-filter.\n", v->script_name, body);
+        char* cpy= ms_strdup (body); // Эта копия будет удалена фильтром.
+        ms_filter_call_method(filter, LUA_FILTER_RUN, &cpy);
+    }
+    else
+    {
+        printf("Script <%s> is out of buffer, dropped.\n", v->script_name);
+    }
+}
+
 /*----------------------------------------------------------------------------*/
 static void build_sound_cards_table(app_vars *v)
 {
@@ -139,7 +154,6 @@ static void build_sound_cards_table(app_vars *v)
 int main(int argc, char *argv[])
 {
     /* Устанавливаем настройки по умолчанию. */
-    //app_vars vars={5004, 7010, "127.0.0.1", {0}, 0, 0, 0.01, 0};
     app_vars vars={0};
     vars.treshold =0.01;
     vars.mf = ms_factory_new();
@@ -151,47 +165,17 @@ int main(int argc, char *argv[])
      * соответствии с аргументами командной строки. */
     scan_args(argc, argv, &vars);
 
-    //ms_init();
-
     /* Создаем экземпляры фильтров передающего тракта. */
     MSSndCard *snd_card =
 	ms_snd_card_manager_get_card(vars.scm, vars.cards[DEF_CARD]);
 
     MSFilter *snd_card_read = ms_snd_card_create_reader(snd_card);
     MSFilter *dtmfgen = ms_factory_create_filter(vars.mf, MS_DTMF_GEN_ID);
-//    MSFilter *rtpsend = ms_filter_new(MS_RTP_SEND_ID);
 
-    /* Создаем фильтр кодера. */
-//    MSFilter *encoder = ms_filter_create_encoder("PCMU");
-
-    /* Регистрируем типы нагрузки. */
-    // register_payloads();
-
-    /* Создаем дуплексную RTP-сессию. */
-//    RtpSession* rtp_session = create_duplex_rtp_session(vars);
-//    ms_filter_call_method(rtpsend, MS_RTP_SEND_SET_SESSION, rtp_session);
-
-    /* Соединяем фильтры передатчика. */
-//    ms_filter_link(snd_card_read, 0, dtmfgen, 0);
-//    ms_filter_link(dtmfgen, 0, encoder, 0);
-//    ms_filter_link(encoder, 0, rtpsend, 0);
-
-    /* Создаем фильтры приемного тракта. */
-//    MSFilter *rtprecv = ms_filter_new(MS_RTP_RECV_ID);
-//    ms_filter_call_method(rtprecv, MS_RTP_RECV_SET_SESSION, rtp_session);
-
-    /* Создаем фильтр декодера. */
-//    MSFilter *decoder=ms_filter_create_decoder("PCMU");
-    //MS_FILE_REC_ID
-
-    /* Регистрируем наш фильтр. */
-    /* Регистрируем наш кастомный фильтр. */
+    /* Регистрируем наш Lua-фильтр. */
 	ms_factory_register_filter(vars.mf, &lua_filter_desc);
     
     MSFilter *nash = ms_factory_create_filter(vars.mf, LUA_FILTER_ID);
-
-    /* Создаем фильтр звуковой карты. */
-   // MSFilter *snd_card_write = ms_snd_card_create_writer(snd_card);
 
     /* Создаем фильтр регистратора. */
     MSFilter *recorder=ms_factory_create_filter(vars.mf, MS_FILE_REC_ID);
@@ -201,6 +185,10 @@ int main(int argc, char *argv[])
     ms_filter_link(snd_card_read, 0, dtmfgen, 0);
     ms_filter_link(dtmfgen, 0, nash, 0);
     ms_filter_link(nash, 0, recorder, 0);
+    
+    /* Устанавливаем преамбулу Lua-фильтра. */
+    char* cpy = ms_strdup ("print(\"Hello from preambula!\\n\")"); // Эта копия будет удалена фильтром.
+    ms_filter_call_method(nash, LUA_FILTER_SET_PREAMBLE, &cpy);
 
     /* Подключаем к фильтру функцию обратного вызова, и передаем ей в
      * качестве пользовательских данных указатель на структуру с настройками
@@ -216,25 +204,8 @@ int main(int argc, char *argv[])
     /* Подключаем источник тактов. */
     ms_ticker_attach(ticker, snd_card_read);
 
-    /* Приступаем к загрузке скрипта. */
-    char* script_name = "../scripts/body1.lua";  
-    FILE* f = fopen(script_name, "r"); 
-    const size_t body_sz = 1024;
-    char body[body_sz + 1];
-    memset(body, 0, body_sz +1);
-    size_t read_res = fread(body, 1, body_sz, f); 
-    if ((read_res > 0) && (read_res <= body_sz))
-    {
-        printf("Script <%s>: <\n%s\n> will be loaded to lua-filter.\n", script_name, body);
-        char* cpy= ms_strdup (body); // Эта копия будет удалена фильтром.
-        ms_filter_call_method(nash, LUA_FILTER_RUN, &cpy);
-    }
-    else
-    {
-        printf("Script <%s> is out of buffer, dropped.\n", script_name);
-    }
+    load_script(&vars, nash);
 
-//    ms_ticker_attach(ticker, rtprecv);
 
     /* Если настройка частоты генератора отлична от нуля, то запускаем генератор. */   
     if (vars.dtmf_cfg.frequencies[0])
@@ -259,7 +230,4 @@ int main(int argc, char *argv[])
         printf("--\n");
     }
     if (vars.en_rec ) ms_filter_call_method(recorder, MS_FILE_REC_CLOSE, 0);
-  
-    
-
 }

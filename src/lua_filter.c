@@ -35,7 +35,6 @@ int
 luaopen_luamylib (lua_State* L)
 {
   lua_getglobal (L, "_G");
-  // luaL_register(L, NULL, printlib); // for Lua versions < 5.2
   luaL_setfuncs (L, printlib, 0);	// for Lua versions 5.2 or greater
   lua_pop (L, 1);
   return 0;
@@ -46,12 +45,11 @@ luaopen_luamylib (lua_State* L)
 typedef struct _ControlData
 {
   lua_State* L;
-  char *script_preamble;	/// Скрипт, который выполняется один раз, выполняя предварительные действия.
-  char *script_code;		/// Скрипт, который выполняется циклически, по каждому тику.
-  // GString *result;
+  char *script_preamble;	// Скрипт, который выполняется один раз, выполняя предварительные действия.
+  char *script_code;		// Скрипт, который выполняется циклически, по каждому тику.
   char *result;
-  bool_t stopped; /// Флаг того, что Lua-машина остановлена.
-  bool_t preabmle_was_run; /// Флаг того, что преамбула уже была выполнена.
+  bool_t stopped; // Флаг того, что Lua-машина остановлена.
+  bool_t preabmle_was_run; // Флаг того, что преамбула уже была выполнена.
   char padding[6];
 } ControlData;
 
