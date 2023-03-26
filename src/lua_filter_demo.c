@@ -1,23 +1,17 @@
-/* Файл mstest9.c Имитатор переговорного устройства c регистратором и
- * нойзгейтом. */
+/* lua_filter_demo.c  Программа-демонстратор фильтра со встроенной Lua-машиной. */
 
 #include <mediastreamer2/mssndcard.h>
 #include <mediastreamer2/dtmfgen.h>
-//#include <mediastreamer2/msrtp.h>
 #include <mediastreamer2/msfilerec.h>
 #include <mediastreamer2/mscommon.h>
 #include <mediastreamer2/msfactory.h>
 #include <mediastreamer2/msticker.h>
-//#include <mediastreamer2/mssndcard.h>
-
 
 /* Подключаем наш фильтр. */
 #include "lua_filter.h"
 
-/* Подключаем файл общих функций. */
-// #include "mstest_common.c"
-
 /*----------------------------------------------------------*/
+/* Переменные состояния приложения. */
 struct _app_vars
 {
     MSDtmfGenCustomTone dtmf_cfg; /* Настройки тестового сигнала генератора. */
@@ -30,14 +24,16 @@ struct _app_vars
 	MSSndCardManager *scm ; /* Менеджер звуковых карт. */
     char cards_count;       /* Количество доступных звуковых карт. */
 	const char **cards;     /* Список доступных звуковых карт. */
-    char* script_name;      /* Файл основного скрипта. */
+    char* script_preambula_name;      /* Файл преамбулы  скрипта. */
+    char* script_body_name;      /* Файл основной части скрипта. */
 };
 
 typedef struct _app_vars app_vars;
 
 /*----------------------------------------------------------*/
 /* Функция преобразования аргументов командной строки в 
- * настройки программы. */
+   настройки программы. 
+ */
 void  scan_args(int argc, char *argv[], app_vars *v)
 {
     int i;
@@ -49,9 +45,8 @@ void  scan_args(int argc, char *argv[], app_vars *v)
             printf("  %s walkie talkie\n\n", p);
             printf("--help      List of options.\n");
             printf("--version   Version of application.\n");
-            printf("--scn       Full name of Lua-script.\n");
-            printf("--port      Remote abonent port number.\n");
-            printf("--lport     Local port number.\n");
+            printf("--scp       Full name of containing preambula of Lua-script file.\n");
+            printf("--scb       Full name of containing body of Lua-script file.\n");
             printf("--gen       Generator frequency.\n");
             printf("--ng        Noise gate treshold level from 0. to 1.0\n");
             printf("--rec       record to file 'record.wav'.\n");
@@ -64,10 +59,16 @@ void  scan_args(int argc, char *argv[], app_vars *v)
             exit(0);
         }
 
-        if (!strcmp(argv[i], "--scn"))
+        if (!strcmp(argv[i], "--scp"))
         {
-            v->script_name = ms_strdup(argv[i+1]);
-            printf("Lua-script_name: %s\n", v->script_name);
+            v->script_preambula_name = ms_strdup(argv[i+1]);
+            printf("Lua-script ptrambula file name: %s\n", v->script_preambula_name);
+        }
+
+        if (!strcmp(argv[i], "--scb"))
+        {
+            v->script_body_name = ms_strdup(argv[i+1]);
+            printf("Lua-script body file name: %s\n", v->script_body_name);
         }
 /*
         if (!strcmp(argv[i], "--addr"))
@@ -109,25 +110,49 @@ void  scan_args(int argc, char *argv[], app_vars *v)
 }
 
 /*----------------------------------------------------------------------------*/
-/* Функция загрузки скриптов преамбулы и тела. */
-static void load_script(app_vars *v, MSFilter* filter)
+/* Функция загрузки основной части (тела) скрипта. */
+static void load_script_body(app_vars *v, MSFilter* filter)
 {
-    if (!v->script_name) return;
-    FILE* f = fopen(v->script_name, "r"); 
-    const size_t body_sz = 1024;
-    char body[body_sz + 1];
-    memset(body, 0, body_sz +1);
-    size_t read_res = fread(body, 1, body_sz, f); 
+    if (!v->script_body_name) return;
+    FILE* f = fopen(v->script_body_name, "r"); 
+    char buf[SCRIPT_SIZE_CONST + 1];
+    memset(buf, 0, SCRIPT_SIZE_CONST + 1);
+    size_t read_res = fread(buf, 1, SCRIPT_SIZE_CONST, f); 
     fclose(f);
-    if ((read_res > 0) && (read_res <= body_sz))
+    if ((read_res > 0) && (read_res <= SCRIPT_SIZE_CONST))
     {
-        printf("Script <%s>: <\n%s\n> will be loaded to lua-filter.\n", v->script_name, body);
-        char* cpy= ms_strdup (body); // Эта копия будет удалена фильтром.
+        printf("Script's body <%s>: <\n%s\n> will be loaded to lua-filter.\n", 
+                  v->script_body_name, buf);
+        char* cpy = ms_strdup (buf); // Эта копия будет затем удалена фильтром.
         ms_filter_call_method(filter, LUA_FILTER_RUN, &cpy);
     }
     else
     {
-        printf("Script <%s> is out of buffer, dropped.\n", v->script_name);
+        printf("Script's body <%s> is out of buffer, dropped.\n", v->script_body_name);
+    }
+}
+
+/*----------------------------------------------------------------------------*/
+/* Функция загрузки преамбулы скрипта. */
+static void load_script_preambula(app_vars *v, MSFilter* filter)
+{
+    if (!v->script_preambula_name) return;
+    FILE* f = fopen(v -> script_preambula_name, "r"); 
+    char buf[SCRIPT_SIZE_CONST + 1];
+    memset(buf, 0, SCRIPT_SIZE_CONST + 1);
+    size_t read_res = fread(buf, 1, SCRIPT_SIZE_CONST, f); 
+    fclose(f);
+    if ((read_res > 0) && (read_res <= SCRIPT_SIZE_CONST))
+    {
+        printf("Script's preambula <%s>: <\n%s\n> will be loaded to lua-filter.\n", 
+                  v -> script_preambula_name, buf);
+        char* cpy = ms_strdup (buf); // Эта копия будет затем удалена фильтром.
+        ms_filter_call_method(filter, LUA_FILTER_SET_PREAMBLE, &cpy);
+    }
+    else
+    {
+        printf("Script's preambula <%s> is out of buffer, dropped.\n",
+         v -> script_preambula_name);
     }
 }
 
@@ -150,7 +175,8 @@ static void build_sound_cards_table(app_vars *v)
 }
 
 #define DEF_CARD 0
-/*----------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------*/
 int main(int argc, char *argv[])
 {
     /* Устанавливаем настройки по умолчанию. */
@@ -187,8 +213,7 @@ int main(int argc, char *argv[])
     ms_filter_link(nash, 0, recorder, 0);
     
     /* Устанавливаем преамбулу Lua-фильтра. */
-    char* cpy = ms_strdup ("print(\"Hello from preambula!\\n\")"); // Эта копия будет удалена фильтром.
-    ms_filter_call_method(nash, LUA_FILTER_SET_PREAMBLE, &cpy);
+    load_script_preambula(&vars, nash);
 
     /* Подключаем к фильтру функцию обратного вызова, и передаем ей в
      * качестве пользовательских данных указатель на структуру с настройками
@@ -204,8 +229,7 @@ int main(int argc, char *argv[])
     /* Подключаем источник тактов. */
     ms_ticker_attach(ticker, snd_card_read);
 
-    load_script(&vars, nash);
-
+    load_script_body(&vars, nash);
 
     /* Если настройка частоты генератора отлична от нуля, то запускаем генератор. */   
     if (vars.dtmf_cfg.frequencies[0])
