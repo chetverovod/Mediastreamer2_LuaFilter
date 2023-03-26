@@ -2,7 +2,7 @@
   
 //------------------------------------------------------------------------------
 static int
-l_my_print (lua_State * L)
+l_my_print (lua_State* L)
 {
   int nargs = lua_gettop (L);
 
@@ -32,7 +32,7 @@ static const struct luaL_Reg printlib[] = {
 
 //------------------------------------------------------------------------------
 int
-luaopen_luamylib (lua_State * L)
+luaopen_luamylib (lua_State* L)
 {
   lua_getglobal (L, "_G");
   // luaL_register(L, NULL, printlib); // for Lua versions < 5.2
@@ -45,7 +45,7 @@ luaopen_luamylib (lua_State * L)
 
 typedef struct _ControlData
 {
-  lua_State *L;
+  lua_State* L;
   char *script_preamble;	/// Скрипт, который выполняется один раз, выполняя предварительные действия.
   char *script_code;		/// Скрипт, который выполняется циклически, по каждому тику.
   // GString *result;
@@ -76,7 +76,7 @@ static void
 control_uninit (MSFilter * f)
 {
   ControlData *cd = (ControlData *) f->data;
-  lua_close (cd->L);		// Останавливаем  Lua-машину.
+  lua_close (cd->L);		// Останавливаем Lua-машину.
   ms_free (cd->script_code);
   ms_free (cd->script_preamble);
   ms_free (cd->result);
@@ -96,6 +96,7 @@ control_process (MSFilter * f)
     {
       if (d->script_preamble)
 	{
+	  // Выполняем скрипт преамбулы.	
 	  err = luaL_dostring (d->L, d->script_preamble);
 	  if (err)
 	    {
@@ -211,7 +212,7 @@ control_process (MSFilter * f)
 	    }
 
 	  lua_setglobal (d->L, LUA_FILTER_DATA);
-
+            // Выполняем основной скрипт.
 	  err = luaL_dostring (d->L, d->script_code);
 
 

@@ -144,13 +144,14 @@ int main(int argc, char *argv[])
     vars.treshold =0.01;
     vars.mf = ms_factory_new();
 	ms_factory_init_voip(vars.mf);
+    vars.scm = ms_factory_get_snd_card_manager(vars.mf);
     build_sound_cards_table(&vars);
 
     /* Устанавливаем настройки настройки программы в 
      * соответствии с аргументами командной строки. */
     scan_args(argc, argv, &vars);
 
-    ms_init();
+    //ms_init();
 
     /* Создаем экземпляры фильтров передающего тракта. */
     MSSndCard *snd_card =
@@ -214,6 +215,25 @@ int main(int argc, char *argv[])
 
     /* Подключаем источник тактов. */
     ms_ticker_attach(ticker, snd_card_read);
+
+    /* Приступаем к загрузке скрипта. */
+    char* script_name = "../scripts/body1.lua";  
+    FILE* f = fopen(script_name, "r"); 
+    const size_t body_sz = 1024;
+    char body[body_sz + 1];
+    memset(body, 0, body_sz +1);
+    size_t read_res = fread(body, 1, body_sz, f); 
+    if ((read_res > 0) && (read_res <= body_sz))
+    {
+        printf("Script <%s>: <\n%s\n> will be loaded to lua-filter.\n", script_name, body);
+        char* cpy= ms_strdup (body); // Эта копия будет удалена фильтром.
+        ms_filter_call_method(nash, LUA_FILTER_RUN, &cpy);
+    }
+    else
+    {
+        printf("Script <%s> is out of buffer, dropped.\n", script_name);
+    }
+
 //    ms_ticker_attach(ticker, rtprecv);
 
     /* Если настройка частоты генератора отлична от нуля, то запускаем генератор. */   
@@ -239,4 +259,7 @@ int main(int argc, char *argv[])
         printf("--\n");
     }
     if (vars.en_rec ) ms_filter_call_method(recorder, MS_FILE_REC_CLOSE, 0);
+  
+    
+
 }
