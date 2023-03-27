@@ -44,10 +44,9 @@ luaopen_luamylib (lua_State* L)
 typedef struct _ControlData
 {
   lua_State* L;
-  char *script_preamble;	// Скрипт, который выполняется один раз, выполняя предварительные действия.
-  char *script_code;		// Скрипт, который выполняется циклически, по каждому тику.
-  char *result;
-  bool_t stopped; // Флаг того, что Lua-машина остановлена.
+  char *script_preamble;   // Скрипт, который выполняется один раз, выполняя предварительные действия.
+  char *script_code;	   // Скрипт, который выполняется циклически, по каждому тику.
+  bool_t stopped;          // Флаг того, что Lua-машина остановлена.
   bool_t preabmle_was_run; // Флаг того, что преамбула уже была выполнена.
   char padding[6];
 } ControlData;
@@ -97,7 +96,6 @@ control_init(MSFilter *f)
 {
 ControlData *cd = ms_new0(ControlData, 1);
 f->data = cd;
-cd->result = NULL;
 cd->L = luaL_newstate(); // Создаем экземпляр виртуальной машины Lua.
 luaL_openlibs(cd->L);	 // Загружаем стандартные библиотеки.
 luaopen_luamylib(cd->L);
@@ -111,7 +109,6 @@ ControlData *cd = (ControlData *)f->data;
 lua_close(cd->L); // Останавливаем Lua-машину.
 ms_free(cd->script_code);
 ms_free(cd->script_preamble);
-ms_free(cd->result);
 ms_free(cd);
 }
 
@@ -279,24 +276,9 @@ control_set_preamble(MSFilter *f, void *arg)
 }
 
 //------------------------------------------------------------------------------
-static int
-control_get_result (MSFilter * f, void *arg)
-{
-  ControlData *d = (ControlData *) f->data;
-  if (arg)
-    {
-      // Возвращаем ответ скрипта, обрезая все, что длинее SCRIPT_ANSWER_SIZE байт.
-      if (d->result)
-	memcpy (arg, d->result, strlen(d->result) % SCRIPT_ANSWER_SIZE);
-    }
-  return 0;
-}
-
-//------------------------------------------------------------------------------
 static MSFilterMethod control_methods[] = {
   {LUA_FILTER_STOP, control_stop},
   {LUA_FILTER_RUN, control_run},
-  {LUA_FILTER_GET_RESULT, control_get_result},
   {LUA_FILTER_SET_PREAMBLE, control_set_preamble},
   {0, NULL}
 };

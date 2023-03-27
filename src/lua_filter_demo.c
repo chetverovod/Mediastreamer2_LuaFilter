@@ -185,7 +185,7 @@ int main(int argc, char *argv[])
     /* Регистрируем наш Lua-фильтр. */
 	ms_factory_register_filter(vars.mf, &lua_filter_desc);
     
-    MSFilter *nash = ms_factory_create_filter(vars.mf, LUA_FILTER_ID);
+    MSFilter *lua_filter = ms_factory_create_filter(vars.mf, LUA_FILTER_ID);
 
     /* Создаем фильтр регистратора. */
     MSFilter *recorder=ms_factory_create_filter(vars.mf, MS_FILE_REC_ID);
@@ -193,11 +193,11 @@ int main(int argc, char *argv[])
 
     /* Соединяем фильтры приёмного тракта. */
     ms_filter_link(snd_card_read, 0, dtmfgen, 0);
-    ms_filter_link(dtmfgen, 0, nash, 0);
-    ms_filter_link(nash, 0, recorder, 0);
+    ms_filter_link(dtmfgen, 0, lua_filter, 0);
+    ms_filter_link(lua_filter, 0, recorder, 0);
     
     /* Устанавливаем преамбулу Lua-фильтра. */
-    load_script_preambula(&vars, nash);
+    load_script_preambula(&vars, lua_filter);
 
     /* Создаем источник тактов - тикер. */
     MSTicker *ticker = ms_ticker_new();
@@ -205,7 +205,7 @@ int main(int argc, char *argv[])
     /* Подключаем источник тактов. */
     ms_ticker_attach(ticker, snd_card_read);
 
-    load_script_body(&vars, nash);
+    load_script_body(&vars, lua_filter);
 
     /* Если настройка частоты генератора отлична от нуля, то запускаем генератор. */   
     if (vars.dtmf_cfg.frequencies[0])
