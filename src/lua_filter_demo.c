@@ -7,6 +7,9 @@
 #include <mediastreamer2/msfactory.h>
 #include <mediastreamer2/msticker.h>
 
+/* Индекс звуковой карты, которую будем использовать по умолчанию. */
+#define DEF_CARD 0
+
 /* Подключаем наш фильтр. */
 #include "lua_filter.h"
 
@@ -70,26 +73,7 @@ void  scan_args(int argc, char *argv[], app_vars *v)
             v->script_body_name = ms_strdup(argv[i+1]);
             printf("Lua-script body file name: %s\n", v->script_body_name);
         }
-/*
-        if (!strcmp(argv[i], "--addr"))
-        {
-            strncpy(v->remote_addr, argv[i+1], 16);
-            v->remote_addr[16]=0;
-            printf("remote addr: %s\n", v->remote_addr);
-        }
 
-        if (!strcmp(argv[i], "--port"))
-        {
-            v->remote_port=atoi(argv[i+1]);
-            printf("remote port: %i\n", v->remote_port);
-        }
-
-        if (!strcmp(argv[i], "--lport"))
-        {
-            v->local_port=atoi(argv[i+1]);
-            printf("local port : %i\n", v->local_port);
-        }
-*/
         if (!strcmp(argv[i], "--gen"))
         {
             v -> dtmf_cfg.frequencies[0] = atoi(argv[i+1]);
@@ -156,7 +140,10 @@ static void load_script_preambula(app_vars *v, MSFilter* filter)
     }
 }
 
+
+
 /*----------------------------------------------------------------------------*/
+/* Функция составляет таблицу доступных звуковых карт. */
 static void build_sound_cards_table(app_vars *v)
 {
 	size_t ndev;
@@ -171,10 +158,7 @@ static void build_sound_cards_table(app_vars *v)
 	}
 	v -> cards[ndev] = NULL;
 	v -> cards_count = ndev;
-    //c -> snd_card = ms_snd_card_manager_get_card(v -> scm, v -> cards[c -> card_id]);
 }
-
-#define DEF_CARD 0
 
 /*----------------------------------------------------------------------------*/
 int main(int argc, char *argv[])
@@ -214,14 +198,6 @@ int main(int argc, char *argv[])
     
     /* Устанавливаем преамбулу Lua-фильтра. */
     load_script_preambula(&vars, nash);
-
-    /* Подключаем к фильтру функцию обратного вызова, и передаем ей в
-     * качестве пользовательских данных указатель на структуру с настройками
-     * программы, в которой среди прочих есть указать на фильтр
-     * регистратора. */
-//    ms_filter_set_notify_callback(nash,
-//            (MSFilterNotifyFunc)change_detected_cb, &vars);
-    // ms_filter_call_method(nash,LUA_FILTER_SET_TRESHOLD, &vars.treshold); 
 
     /* Создаем источник тактов - тикер. */
     MSTicker *ticker = ms_ticker_new();

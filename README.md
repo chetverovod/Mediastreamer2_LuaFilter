@@ -38,5 +38,5 @@ make all
 
 ## Run demo application
 ```
-./lua_filter_demo
+./lua_filter_demo --scb ../scripts/body1.lua  --scp ../scripts/preambula1.lua
 ```

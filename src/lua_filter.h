@@ -23,13 +23,32 @@
    */
 #define LUA_FILTER_ID 4001
 
-#define LUA_FILTER_DATA_CONST       "lf_data"
-#define LUA_FILTER_DATA_LEN_CONST   "lf_data_len"
-#define LUA_FILTER_DATA_OUT_CONST   "lf_data_out"
-#define LUA_FILTER_DATA_OUT_LEN_CONST "lf_data_out_len"
+/*
+   Имя глобальной переменной, в которую функция фильтра помещает блок входных
+   данных.
+*/
+#define LF_DATA_CONST       "lf_data"
 
-#define LUA_FILTER_INPUT_EMPTY_CONST "input_empty"   /// Флаг того, что входная очередь фильтра пуста.
-#define LUA_FILTER_DISABLE_OUT_CONST "disable_out"   /// Флаг того, что фильтр не должен отправлять сообщение, изменяется скриптом Lua.
+/*
+   Имя глобальной переменной, в которую функция фильтра помещает размер блока входных
+   данных.
+*/
+#define LF_DATA_LEN_CONST   "lf_data_len"
+
+/*
+   Имя глобальной переменной, в которую функция фильтра помещает блок выходных
+   данных.
+*/
+#define LF_DATA_OUT_CONST   "lf_data_out"
+
+/*
+   Имя глобальной переменной, в которую функция фильтра помещает размер блока выходных
+   данных.
+*/
+#define LF_DATA_OUT_LEN_CONST "lf_data_out_len"
+
+/* Флаг того, что входная очередь фильтра пуста. */
+#define LF_INPUT_EMPTY_CONST "input_empty"
 
 /*
    Определяем максимальный размер скрипта и преамбулы.
@@ -41,22 +60,20 @@
 */
 #define SCRIPT_ANSWER_SIZE_CONST 1024
 
- /* 
+/* 
    Определяем константы фильтра.
- */ 
+*/ 
 #define SCRIPT_ANSWER_SIZE       SCRIPT_ANSWER_SIZE_CONST
-#define LUA_FILTER_DATA          LUA_FILTER_DATA_CONST
-#define LUA_FILTER_DATA_LEN      LUA_FILTER_DATA_LEN_CONST
-#define LUA_FILTER_DATA_OUT      LUA_FILTER_DATA_OUT_CONST
-#define LUA_FILTER_DATA_OUT_LEN  LUA_FILTER_DATA_OUT_LEN_CONST
-#define LUA_FILTER_INPUT_EMPTY   LUA_FILTER_INPUT_EMPTY_CONST
-#define LUA_FILTER_DISABLE_OUT   LUA_FILTER_DISABLE_OUT_CONST
+#define LF_DATA          LF_DATA_CONST
+#define LF_DATA_LEN      LF_DATA_LEN_CONST
+#define LF_DATA_OUT      LF_DATA_OUT_CONST
+#define LF_DATA_OUT_LEN  LF_DATA_OUT_LEN_CONST
+#define LF_INPUT_EMPTY   LF_INPUT_EMPTY_CONST
 
 /* 
    Определяем методы нашего фильтра. Вторым параметром макроса должен
    порядковый номер метода, число от 0.  Третий параметр это тип аргумента
-   метода, указатель на который будет передаваться методу при вызове. У методов
-   аргументов может и не быть, как показано ниже. 
+   метода, указатель на который будет передаваться методу при вызове.
 */
 #define LUA_FILTER_RUN	      MS_FILTER_METHOD(LUA_FILTER_ID,0,char)
 #define LUA_FILTER_STOP        MS_FILTER_METHOD(LUA_FILTER_ID,1,int)
