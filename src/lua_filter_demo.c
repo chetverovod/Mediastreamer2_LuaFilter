@@ -199,14 +199,10 @@ int main(int argc, char *argv[])
     if (vars.en_gen)
     {
      ms_filter_link(voidsource, 0, dtmfgen, 0);
-     //!!ms_filter_link(dtmfgen, 0, lua_filter, 0);
-     ms_filter_link(dtmfgen, 0, tee, 0);
-     //!!ms_filter_link(lua_filter, 0, tee, 0);
+     ms_filter_link(dtmfgen, 0, lua_filter, 0);
+     //!!ms_filter_link(dtmfgen, 0, tee, 0);
+     ms_filter_link(lua_filter, 0, tee, 0);
     
-   /* char key='1';
-    ms_filter_call_method(dtmfgen, MS_DTMF_GEN_PLAY, (void*)&key);
-    */
-
     ms_filter_call_method(dtmfgen, MS_DTMF_GEN_PLAY_CUSTOM,
                     (void*)&vars.dtmf_cfg);
     
@@ -252,10 +248,12 @@ int main(int argc, char *argv[])
         vars.dtmf_cfg.amplitude = 1.0;
         vars.dtmf_cfg.interval = 0.;
         vars.dtmf_cfg.repeat_count = 0.;
+
+        /* Запускаем генератор. */
+        ms_filter_call_method(dtmfgen, MS_DTMF_GEN_PLAY_CUSTOM,
+                          (void *)&vars.dtmf_cfg);
         printf("Sound from generator lasts %i ms.\n", vars.dtmf_cfg.duration);
     }
-    ms_filter_call_method(dtmfgen, MS_DTMF_GEN_PLAY_CUSTOM,
-                          (void *)&vars.dtmf_cfg);
 
     printf("Press ENTER to exit.\n ");
     char c=getchar();

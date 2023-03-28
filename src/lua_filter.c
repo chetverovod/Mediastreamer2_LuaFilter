@@ -214,11 +214,12 @@ while ((im = ms_queue_get(f->inputs[0])) != NULL)
 	mblk_t *p = im;
 	if (out_im)
 		p = out_im;
-	if (d->script_code)
+	//!!if (d->script_code)
 	{
 		for (i = 0; i < f->desc->noutputs; i++)
 		{
-		  if ((!disabled_out) && (f->outputs[i] != NULL) && !d->stopped)
+		  //!!if ((!disabled_out) && (f->outputs[i] != NULL) && !d->stopped)
+		  if ((!disabled_out) && (f->outputs[i] != NULL))
 		  if (p)
 			  ms_queue_put(f->outputs[i], dupmsg(p));
 		}
