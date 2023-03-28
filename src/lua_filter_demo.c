@@ -1,5 +1,6 @@
 /* lua_filter_demo.c  Программа-демонстратор фильтра со встроенной Lua-машиной. */
 
+/* Подключаем заголовочные файлы фильтров Mediastreamer2. */
 #include <mediastreamer2/mssndcard.h>
 #include <mediastreamer2/dtmfgen.h>
 #include <mediastreamer2/msfilerec.h>
@@ -20,11 +21,10 @@ struct _app_vars
     MSDtmfGenCustomTone dtmf_cfg; /* Настройки тестового сигнала генератора. */
     MSFilter* recorder;           /* Указатель на фильтр регистратор. */
     bool_t file_is_open;          /* Флаг того, что файл для записи открыт. */
-    /* Порог, при котором прекращается запись принимаемого сигнала в файл. */
-    float treshold; 
+    bool_t en_gen;          /* Включить звуковой генератор. */    
     bool_t en_rec;          /* Включить запись в файл. */    
     MSFactory *mf;          /* Фабрика фильтров медиастримера. */
-	MSSndCardManager *scm ; /* Менеджер звуковых карт. */
+	MSSndCardManager *scm;  /* Менеджер звуковых карт. */
     char cards_count;       /* Количество доступных звуковых карт. */
 	const char **cards;     /* Список доступных звуковых карт. */
     char* script_preambula_name;      /* Файл преамбулы  скрипта. */
@@ -45,14 +45,13 @@ void  scan_args(int argc, char *argv[], app_vars *v)
         if (!strcmp(argv[i], "--help"))
         {
             char *p=argv[0]; p=p + 2;
-            printf("  %s walkie talkie\n\n", p);
+            printf("  %s, developed  by Igor Plastov\nigor.plastov@yandex.ru\n\n", p);
             printf("--help      List of options.\n");
             printf("--version   Version of application.\n");
             printf("--scp       Full name of containing preambula of Lua-script file.\n");
             printf("--scb       Full name of containing body of Lua-script file.\n");
-            printf("--gen       Generator frequency.\n");
-            printf("--ng        Noise gate treshold level from 0. to 1.0\n");
-            printf("--rec       record to file 'record.wav'.\n");
+            printf("--gen       Set generator's frequency, Hz.\n");
+            printf("--rec       Make recording to file 'record.wav'.\n");
             exit(0);
         }
 
@@ -76,15 +75,12 @@ void  scan_args(int argc, char *argv[], app_vars *v)
 
         if (!strcmp(argv[i], "--gen"))
         {
-            v -> dtmf_cfg.frequencies[0] = atoi(argv[i+1]);
-            printf("gen freq : %i\n", v -> dtmf_cfg.frequencies[0]);
+            v -> en_gen = TRUE;
+            int freq = atoi(argv[i+1]);
+            v -> dtmf_cfg.frequencies[0] = freq;
+            printf("Generator's frequency: %i Hz\n", v -> dtmf_cfg.frequencies[0]);
         }
 
-        if (!strcmp(argv[i], "--ng"))
-        {
-            v -> dtmf_cfg.frequencies[0] = atoi(argv[i+1]);
-            printf("noise gate treshold: %f\n", v -> treshold);
-        }
          if (!strcmp(argv[i], "--rec"))
         {
             v -> en_rec = TRUE;
@@ -140,8 +136,6 @@ static void load_script_preambula(app_vars *v, MSFilter* filter)
     }
 }
 
-
-
 /*----------------------------------------------------------------------------*/
 /* Функция составляет таблицу доступных звуковых карт. */
 static void build_sound_cards_table(app_vars *v)
@@ -165,9 +159,9 @@ int main(int argc, char *argv[])
 {
     /* Устанавливаем настройки по умолчанию. */
     app_vars vars={0};
-    vars.treshold =0.01;
     vars.mf = ms_factory_new();
 	ms_factory_init_voip(vars.mf);
+
     vars.scm = ms_factory_get_snd_card_manager(vars.mf);
     build_sound_cards_table(&vars);
 
@@ -176,10 +170,14 @@ int main(int argc, char *argv[])
     scan_args(argc, argv, &vars);
 
     /* Создаем экземпляры фильтров передающего тракта. */
+    printf("Will be used soundcard:\n<\n%s\n>\n", vars.cards[DEF_CARD]);
     MSSndCard *snd_card =
 	ms_snd_card_manager_get_card(vars.scm, vars.cards[DEF_CARD]);
 
     MSFilter *snd_card_read = ms_snd_card_create_reader(snd_card);
+    MSFilter *snd_card_write = ms_snd_card_create_writer(snd_card);
+    
+    MSFilter *voidsource = ms_factory_create_filter(vars.mf, MS_VOID_SOURCE_ID);
     MSFilter *dtmfgen = ms_factory_create_filter(vars.mf, MS_DTMF_GEN_ID);
 
     /* Регистрируем наш Lua-фильтр. */
@@ -190,25 +188,57 @@ int main(int argc, char *argv[])
     /* Создаем фильтр регистратора. */
     MSFilter *recorder=ms_factory_create_filter(vars.mf, MS_FILE_REC_ID);
     vars.recorder = recorder; 
-
-    /* Соединяем фильтры приёмного тракта. */
-    ms_filter_link(snd_card_read, 0, dtmfgen, 0);
-    ms_filter_link(dtmfgen, 0, lua_filter, 0);
-    ms_filter_link(lua_filter, 0, recorder, 0);
     
-    /* Устанавливаем преамбулу Lua-фильтра. */
-    load_script_preambula(&vars, lua_filter);
+    MSFilter *tee=ms_factory_create_filter(vars.mf, MS_TEE_ID);
 
     /* Создаем источник тактов - тикер. */
     MSTicker *ticker = ms_ticker_new();
 
+    /* Соединяем фильтры согласно схеме. */
+    if (vars.en_gen)
+    {
+     ms_filter_link(voidsource, 0, dtmfgen, 0);
+     // ms_filter_link(dtmfgen, 0, lua_filter, 0);
+      //ms_filter_link(dtmfgen, 0, tee, 0);
+     ms_filter_link(dtmfgen, 0, snd_card_write, 0);
+    
+    char key='1';
+    ms_filter_call_method(dtmfgen, MS_DTMF_GEN_PLAY, (void*)&key);
+    /*
+    ms_filter_call_method(dtmfgen, MS_DTMF_GEN_PLAY_CUSTOM,
+                    (void*)&vars.dtmf_cfg);
+                    */
+    }
+    else
+    {
+     ms_filter_link(snd_card_read, 0,lua_filter, 0);
+     ms_filter_link(lua_filter, 0, tee, 0);
+    }
+    /*
+    ms_filter_link(tee, 0, recorder, 0);
+    ms_filter_link(tee, 1, snd_card_write, 0);
+    */
+
+    /* Устанавливаем преамбулу Lua-фильтра. */
+    load_script_preambula(&vars, lua_filter);
+
+
     /* Подключаем источник тактов. */
+    if (vars.en_gen)
+    {
+    ms_ticker_attach(ticker, voidsource);
+    }
+    else
+    {
     ms_ticker_attach(ticker, snd_card_read);
+    }
 
     load_script_body(&vars, lua_filter);
 
+    if ( vars.en_rec ) ms_filter_call_method(recorder, MS_FILE_REC_START, 0);
+
     /* Если настройка частоты генератора отлична от нуля, то запускаем генератор. */   
-    if (vars.dtmf_cfg.frequencies[0])
+    if (vars.en_gen)
     {
         /* Настраиваем структуру, управляющую выходным сигналом генератора. */
         vars.dtmf_cfg.duration = 10000;
@@ -220,7 +250,7 @@ int main(int argc, char *argv[])
     char c=getchar();
     while(c != '\n')
     {
-        if(vars.dtmf_cfg.frequencies[0])
+        if(vars.en_gen)
         {
             /* Включаем звуковой генератор. */
             ms_filter_call_method(dtmfgen, MS_DTMF_GEN_PLAY_CUSTOM,

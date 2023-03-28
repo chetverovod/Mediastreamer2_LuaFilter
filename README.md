@@ -32,11 +32,11 @@ git clone git@github.com:chetverovod/Mediastreamer2_LuaFilter.git
 
 ## Buliding demo application
 ```
-cd ./src
-make all
+$ cd ./src
+$ make all
 ```
 
 ## Run demo application
 ```
-./lua_filter_demo --scb ../scripts/body1.lua  --scp ../scripts/preambula1.lua
+$ ./lua_filter_demo --scb ../scripts/body1.lua  --scp ../scripts/preambula1.lua
 ```

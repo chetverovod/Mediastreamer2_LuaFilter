@@ -1,6 +1,7 @@
 #include "lua_filter.h"
   
 //------------------------------------------------------------------------------
+/* Новая функция печати из Lua-скрипта. */
 static int
 l_my_print (lua_State* L)
 {
@@ -13,7 +14,6 @@ l_my_print (lua_State* L)
 	  /* Pop the next arg using lua_tostring(L, i) and do your print */
 	  const char *str = lua_tostring (L, lua_gettop (L));
 	  printf ("%s", str);
-
 	}
       else
 	{
@@ -25,6 +25,7 @@ l_my_print (lua_State* L)
 }
 
 //------------------------------------------------------------------------------
+/* Переопределяем функцию печати из Lua-скрипта. . */
 static const struct luaL_Reg printlib[] = {
   {"print", l_my_print},
   {NULL, NULL}			/* end of array */
@@ -44,8 +45,10 @@ luaopen_luamylib (lua_State* L)
 typedef struct _ControlData
 {
   lua_State* L;
-  char *script_preamble;   // Скрипт, который выполняется один раз, выполняя предварительные действия.
-  char *script_code;	   // Скрипт, который выполняется циклически, по каждому тику.
+  char *script_preamble;   // Скрипт, который выполняется один раз, выполняя
+                           // предварительные действия.
+  char *script_code;	   // Скрипт, который выполняется циклически, по
+                           // каждому тику.
   bool_t stopped;          // Флаг того, что Lua-машина остановлена.
   bool_t preabmle_was_run; // Флаг того, что преамбула уже была выполнена.
   char padding[6];
@@ -59,6 +62,7 @@ MS_UNUSED(f);
 }
 
 //------------------------------------------------------------------------------
+/* Функция выполнения преамбулы скрипта. */
 static void
 run_preambula(MSFilter *f)
 {
@@ -136,8 +140,7 @@ while ((im = ms_queue_get(f->inputs[0])) != NULL)
 	  lua_pushinteger(d->L, (lua_Integer)input_empty);
 	  lua_setglobal(d->L, LF_INPUT_EMPTY);
 	  {
-		  //  Кладем блок данных со входа фильтра на стек Lua-машины.
-		 // ua_pushstring(d->L, "");
+		  /* Кладем блок данных со входа фильтра на стек Lua-машины. */
 		  size_t sz = (size_t)msgdsize(im);
 		  lua_pushinteger(d->L, (lua_Integer)sz);
 		  lua_setglobal(d->L, LF_DATA_LEN);
@@ -146,36 +149,25 @@ while ((im = ms_queue_get(f->inputs[0])) != NULL)
 
 	  lua_setglobal(d->L, LF_DATA);
 
-	  // Удаляем со стека все, что возможно осталось.
+	  /* Удаляем со стека все, что там, возможно, осталось. */
 	  int values_on_stack;
 	  values_on_stack = lua_gettop(d->L);
 	  lua_pop(d->L, values_on_stack);
 
-	  // Выполняем тело скрипта.
+	  /* Выполняем тело скрипта. */
 	  err = luaL_dostring(d->L, d->script_code);
-	  if (err)
-	  {
-		  printf("\nFilter <%s> Lua error.\n", f->desc->name);
-		  const char *answer = lua_tostring(d->L, lua_gettop(d->L));
-		  if (answer)
-		  {
-			  printf("Lua error description:<%s>.\n", answer);
-		  }
-	  }
-	  else
-	  {
-		  (void)values_on_stack;
-		  values_on_stack = lua_gettop(d->L);
 
+	  /* Обрабатываем результат выполнения. */
+	  if (!err)
+	  {
 		  int script_body_status = lua_tointeger(d->L, lua_gettop(d->L));
 		  if (script_body_status < 0)
 		  {
-			  printf("\nFilter <%s> script_body_status %i.\n", f->desc->name, script_body_status);
+			  printf("\nFilter <%s> script_body_status %i.\n", f->desc->name,
+					 script_body_status);
 		  }
-		  
-		  values_on_stack = lua_gettop(d->L);
 
-		  // Извлекаем размер выходного блока  данных, возможно он изменился.
+		  /* Извлекаем размер выходного блока данных, возможно он изменился. */
 		  lua_getglobal(d->L, LF_DATA_OUT_LEN);
 		  size_t real_size = 0;
 		  char type_on_top = lua_type(d->L, lua_gettop(d->L));
@@ -188,26 +180,35 @@ while ((im = ms_queue_get(f->inputs[0])) != NULL)
 		  }
 		  lua_pop(d->L, 1);
 
-		  // Извлекаем длинную строку с преобразованными данными входного блока данных.
-		  // И пробрасываем его далее.
+		  /* Извлекаем длинную строку с преобразованными данными входного блока
+		   данных. И пробрасываем его далее. */
 		  lua_getglobal(d->L, LF_DATA_OUT);
 		  size_t msg_len = 0;
 		  if (lua_type(d->L, lua_gettop(d->L)) == LUA_TSTRING)
 		  {
-		  const char *msg_body = lua_tolstring(d->L, 1, &msg_len);
-		  if (msg_body && msg_len)
-		  {
-			  msg_len = real_size;
-			  out_im = allocb((int)msg_len, 0);
-			  memcpy(out_im->b_wptr, msg_body, msg_len);
-			  out_im->b_wptr = out_im->b_wptr + msg_len;
-		  }
+			  const char *msg_body = lua_tolstring(d->L, 1, &msg_len);
+			  if (msg_body && msg_len)
+			  {
+				  msg_len = real_size;
+				  out_im = allocb((int)msg_len, 0);
+				  memcpy(out_im->b_wptr, msg_body, msg_len);
+				  out_im->b_wptr = out_im->b_wptr + msg_len;
+			  }
 		  }
 		  lua_pop(d->L, 1);
 
-		  // Вычитываем и отбрасываем все, что возможно осталось на стеке.
+		  /* Вычитываем и отбрасываем все, что возможно осталось на стеке. */
 		  values_on_stack = lua_gettop(d->L);
 		  lua_pop(d->L, values_on_stack);
+	  }
+	  else
+	  {
+		  printf("\nFilter <%s> Lua error.\n", f->desc->name);
+		  const char *answer = lua_tostring(d->L, lua_gettop(d->L));
+		  if (answer)
+		  {
+			  printf("Lua error description:<%s>.\n", answer);
+		  }
 	  }
 	}
 	mblk_t *p = im;
@@ -224,10 +225,11 @@ while ((im = ms_queue_get(f->inputs[0])) != NULL)
 	}
 	freemsg(out_im);
 	freemsg(im);
-  }
+}
 }
 
 //------------------------------------------------------------------------------
+/* Функция постановки скрипта на паузу. */
 static int
 control_stop(MSFilter *f, void *arg)
 {
@@ -244,6 +246,8 @@ control_stop(MSFilter *f, void *arg)
 }
 
 //------------------------------------------------------------------------------
+/* Функция запускает тело скрипта в работу. Если аргумент содержит текст
+   скрипта, то старый скрипт отбрасывается и используется новый. */
 static int
 control_run(MSFilter *f, void *arg)
 {
@@ -260,6 +264,7 @@ control_run(MSFilter *f, void *arg)
 }
 
 //------------------------------------------------------------------------------
+/* Функция установки преамбулы скрипта. Старая преамбула заменяется на новую. */
 static int
 control_set_preamble(MSFilter *f, void *arg)
 {
@@ -276,6 +281,7 @@ control_set_preamble(MSFilter *f, void *arg)
 }
 
 //------------------------------------------------------------------------------
+/* Настройка таблицы функций обратного вызова. */
 static MSFilterMethod control_methods[] = {
   {LUA_FILTER_STOP, control_stop},
   {LUA_FILTER_RUN, control_run},
