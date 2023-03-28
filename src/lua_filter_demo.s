@@ -424,7 +424,7 @@ load_script_body:
 	.loc 1 96 31
 	nop
 .L10:
-	.loc 1 113 1
+	.loc 1 114 1
 	movq	-8(%rbp), %rax
 	subq	%fs:40, %rax
 	je	.L15
@@ -447,7 +447,7 @@ load_script_body:
 	.type	load_script_preambula, @function
 load_script_preambula:
 .LFB22:
-	.loc 1 118 1
+	.loc 1 119 1
 	.cfi_startproc
 	endbr64
 	pushq	%rbp
@@ -458,32 +458,32 @@ load_script_preambula:
 	subq	$1088, %rsp
 	movq	%rdi, -1080(%rbp)
 	movq	%rsi, -1088(%rbp)
-	.loc 1 118 1
+	.loc 1 119 1
 	movq	%fs:40, %rax
 	movq	%rax, -8(%rbp)
 	xorl	%eax, %eax
-	.loc 1 119 11
+	.loc 1 120 11
 	movq	-1080(%rbp), %rax
 	movq	80(%rax), %rax
-	.loc 1 119 8
+	.loc 1 120 8
 	testq	%rax, %rax
 	je	.L23
-	.loc 1 120 23
+	.loc 1 121 23
 	movq	-1080(%rbp), %rax
 	movq	80(%rax), %rax
-	.loc 1 120 15
+	.loc 1 121 15
 	leaq	.LC18(%rip), %rdx
 	movq	%rdx, %rsi
 	movq	%rax, %rdi
 	call	fopen@PLT
 	movq	%rax, -1056(%rbp)
-	.loc 1 122 5
+	.loc 1 123 5
 	leaq	-1040(%rbp), %rax
 	movl	$1025, %edx
 	movl	$0, %esi
 	movq	%rax, %rdi
 	call	memset@PLT
-	.loc 1 123 23
+	.loc 1 124 23
 	movq	-1056(%rbp), %rdx
 	leaq	-1040(%rbp), %rax
 	movq	%rdx, %rcx
@@ -492,18 +492,18 @@ load_script_preambula:
 	movq	%rax, %rdi
 	call	fread@PLT
 	movq	%rax, -1048(%rbp)
-	.loc 1 124 5
+	.loc 1 125 5
 	movq	-1056(%rbp), %rax
 	movq	%rax, %rdi
 	call	fclose@PLT
-	.loc 1 125 8
+	.loc 1 126 8
 	cmpq	$0, -1048(%rbp)
 	je	.L20
-	.loc 1 125 24 discriminator 1
+	.loc 1 126 24 discriminator 1
 	cmpq	$1024, -1048(%rbp)
 	ja	.L20
 .LBB5:
-	.loc 1 127 9
+	.loc 1 128 9
 	movq	-1080(%rbp), %rax
 	movq	80(%rax), %rax
 	leaq	-1040(%rbp), %rdx
@@ -512,23 +512,23 @@ load_script_preambula:
 	movq	%rax, %rdi
 	movl	$0, %eax
 	call	printf@PLT
-	.loc 1 129 20
+	.loc 1 130 20
 	leaq	-1040(%rbp), %rax
 	movq	%rax, %rdi
 	call	ortp_strdup@PLT
-	.loc 1 129 15
+	.loc 1 130 15
 	movq	%rax, -1064(%rbp)
-	.loc 1 130 9
+	.loc 1 131 9
 	leaq	-1064(%rbp), %rdx
 	movq	-1088(%rbp), %rax
 	movl	$262210049, %esi
 	movq	%rax, %rdi
 	call	ms_filter_call_method@PLT
 .LBE5:
-	.loc 1 126 5
+	.loc 1 127 5
 	jmp	.L17
 .L20:
-	.loc 1 134 9
+	.loc 1 135 9
 	movq	-1080(%rbp), %rax
 	movq	80(%rax), %rax
 	movq	%rax, %rsi
@@ -538,10 +538,10 @@ load_script_preambula:
 	call	printf@PLT
 	jmp	.L17
 .L23:
-	.loc 1 119 36
+	.loc 1 120 36
 	nop
 .L17:
-	.loc 1 137 1
+	.loc 1 138 1
 	movq	-8(%rbp), %rax
 	subq	%fs:40, %rax
 	je	.L22
@@ -556,7 +556,7 @@ load_script_preambula:
 	.type	build_sound_cards_table, @function
 build_sound_cards_table:
 .LFB23:
-	.loc 1 142 1
+	.loc 1 143 1
 	.cfi_startproc
 	endbr64
 	pushq	%rbp
@@ -568,76 +568,76 @@ build_sound_cards_table:
 	subq	$56, %rsp
 	.cfi_offset 3, -24
 	movq	%rdi, -56(%rbp)
-	.loc 1 146 32
+	.loc 1 147 32
 	movq	-56(%rbp), %rax
 	movq	48(%rax), %rax
 	movq	%rax, %rdi
 	call	ms_factory_get_snd_card_manager@PLT
-	.loc 1 146 3
+	.loc 1 147 3
 	movq	%rax, %rdi
 	call	ms_snd_card_manager_get_list@PLT
 	movq	%rax, -32(%rbp)
-	.loc 1 147 9
+	.loc 1 148 9
 	movq	-32(%rbp), %rax
 	movq	%rax, %rdi
 	call	bctbx_list_size@PLT
 	movq	%rax, -24(%rbp)
-	.loc 1 148 30
+	.loc 1 149 30
 	movq	-24(%rbp), %rax
 	addq	$1, %rax
-	.loc 1 148 14
+	.loc 1 149 14
 	salq	$3, %rax
 	movq	%rax, %rdi
 	call	ortp_malloc@PLT
-	.loc 1 148 13
+	.loc 1 149 13
 	movq	-56(%rbp), %rdx
 	movq	%rax, 72(%rdx)
-	.loc 1 149 10
+	.loc 1 150 10
 	movl	$0, -36(%rbp)
-	.loc 1 149 2
+	.loc 1 150 2
 	jmp	.L25
 .L26:
-	.loc 1 151 63 discriminator 3
+	.loc 1 152 63 discriminator 3
 	movq	-32(%rbp), %rax
 	movq	16(%rax), %rax
-	.loc 1 151 5 discriminator 3
+	.loc 1 152 5 discriminator 3
 	movq	-56(%rbp), %rdx
 	movq	72(%rdx), %rcx
-	.loc 1 151 13 discriminator 3
+	.loc 1 152 13 discriminator 3
 	movl	-36(%rbp), %edx
 	movslq	%edx, %rdx
 	salq	$3, %rdx
 	leaq	(%rcx,%rdx), %rbx
-	.loc 1 151 19 discriminator 3
+	.loc 1 152 19 discriminator 3
 	movq	%rax, %rdi
 	call	ms_snd_card_get_string_id@PLT
-	.loc 1 151 17 discriminator 3
+	.loc 1 152 17 discriminator 3
 	movq	%rax, (%rbx)
-	.loc 1 149 33 discriminator 3
+	.loc 1 150 33 discriminator 3
 	movq	-32(%rbp), %rax
 	movq	(%rax), %rax
 	movq	%rax, -32(%rbp)
-	.loc 1 149 48 discriminator 3
+	.loc 1 150 48 discriminator 3
 	addl	$1, -36(%rbp)
 .L25:
-	.loc 1 149 20 discriminator 1
+	.loc 1 150 20 discriminator 1
 	cmpq	$0, -32(%rbp)
 	jne	.L26
-	.loc 1 153 4
+	.loc 1 154 4
 	movq	-56(%rbp), %rax
 	movq	72(%rax), %rdx
-	.loc 1 153 12
+	.loc 1 154 12
 	movq	-24(%rbp), %rax
 	salq	$3, %rax
 	addq	%rdx, %rax
-	.loc 1 153 19
-	movq	$0, (%rax)
 	.loc 1 154 19
+	movq	$0, (%rax)
+	.loc 1 155 19
 	movq	-24(%rbp), %rax
 	movl	%eax, %edx
 	movq	-56(%rbp), %rax
 	movb	%dl, 64(%rax)
-	.loc 1 155 1
+	.loc 1 156 1
 	nop
 	movq	-8(%rbp), %rbx
 	leave
@@ -650,16 +650,21 @@ build_sound_cards_table:
 	.align 8
 .LC23:
 	.string	"Will be used soundcard:\n<\n%s\n>\n"
-.LC25:
-	.string	"Press ENTER to exit.\n "
+.LC24:
+	.string	"sound"
+	.align 8
 .LC26:
-	.string	"--"
+	.string	"Sound from generator lasts %i ms.\n"
+.LC27:
+	.string	"Press ENTER to exit.\n "
+.LC28:
+	.string	"File recording was finished."
 	.text
 	.globl	main
 	.type	main, @function
 main:
 .LFB24:
-	.loc 1 159 1
+	.loc 1 160 1
 	.cfi_startproc
 	endbr64
 	pushq	%rbp
@@ -670,131 +675,131 @@ main:
 	subq	$208, %rsp
 	movl	%edi, -196(%rbp)
 	movq	%rsi, -208(%rbp)
-	.loc 1 159 1
+	.loc 1 160 1
 	movq	%fs:40, %rax
 	movq	%rax, -8(%rbp)
 	xorl	%eax, %eax
-	.loc 1 161 14
+	.loc 1 162 14
 	leaq	-112(%rbp), %rdx
 	movl	$0, %eax
 	movl	$12, %ecx
 	movq	%rdx, %rdi
 	rep stosq
-	.loc 1 162 15
+	.loc 1 163 15
 	call	ms_factory_new@PLT
-	.loc 1 162 13
+	.loc 1 163 13
 	movq	%rax, -64(%rbp)
-	.loc 1 163 2
+	.loc 1 164 2
 	movq	-64(%rbp), %rax
 	movq	%rax, %rdi
 	call	ms_factory_init_voip@PLT
-	.loc 1 165 16
+	.loc 1 166 16
 	movq	-64(%rbp), %rax
 	movq	%rax, %rdi
 	call	ms_factory_get_snd_card_manager@PLT
-	.loc 1 165 14
+	.loc 1 166 14
 	movq	%rax, -56(%rbp)
-	.loc 1 166 5
+	.loc 1 167 5
 	leaq	-112(%rbp), %rax
 	movq	%rax, %rdi
 	call	build_sound_cards_table
-	.loc 1 170 5
+	.loc 1 171 5
 	leaq	-112(%rbp), %rdx
 	movq	-208(%rbp), %rcx
 	movl	-196(%rbp), %eax
 	movq	%rcx, %rsi
 	movl	%eax, %edi
 	call	scan_args
-	.loc 1 173 55
+	.loc 1 174 55
 	movq	-40(%rbp), %rax
-	.loc 1 173 5
+	.loc 1 174 5
 	movq	(%rax), %rax
 	movq	%rax, %rsi
 	leaq	.LC23(%rip), %rax
 	movq	%rax, %rdi
 	movl	$0, %eax
 	call	printf@PLT
-	.loc 1 175 45
+	.loc 1 176 45
 	movq	-40(%rbp), %rax
-	.loc 1 175 2
+	.loc 1 176 2
 	movq	(%rax), %rdx
 	movq	-56(%rbp), %rax
 	movq	%rdx, %rsi
 	movq	%rax, %rdi
 	call	ms_snd_card_manager_get_card@PLT
 	movq	%rax, -184(%rbp)
-	.loc 1 177 31
+	.loc 1 178 31
 	movq	-184(%rbp), %rax
 	movq	%rax, %rdi
 	call	ms_snd_card_create_reader@PLT
 	movq	%rax, -176(%rbp)
-	.loc 1 178 32
+	.loc 1 179 32
 	movq	-184(%rbp), %rax
 	movq	%rax, %rdi
 	call	ms_snd_card_create_writer@PLT
 	movq	%rax, -168(%rbp)
-	.loc 1 180 28
+	.loc 1 181 28
 	movq	-64(%rbp), %rax
 	movl	$56, %esi
 	movq	%rax, %rdi
 	call	ms_factory_create_filter@PLT
 	movq	%rax, -160(%rbp)
-	.loc 1 181 25
+	.loc 1 182 25
 	movq	-64(%rbp), %rax
 	movl	$15, %esi
 	movq	%rax, %rdi
 	call	ms_factory_create_filter@PLT
 	movq	%rax, -152(%rbp)
-	.loc 1 184 2
+	.loc 1 185 2
 	movq	-64(%rbp), %rax
 	leaq	lua_filter_desc(%rip), %rdx
 	movq	%rdx, %rsi
 	movq	%rax, %rdi
 	call	ms_factory_register_filter@PLT
-	.loc 1 186 28
+	.loc 1 187 28
 	movq	-64(%rbp), %rax
 	movl	$4001, %esi
 	movq	%rax, %rdi
 	call	ms_factory_create_filter@PLT
 	movq	%rax, -144(%rbp)
-	.loc 1 189 24
+	.loc 1 190 24
 	movq	-64(%rbp), %rax
 	movl	$14, %esi
 	movq	%rax, %rdi
 	call	ms_factory_create_filter@PLT
 	movq	%rax, -136(%rbp)
-	.loc 1 190 19
+	.loc 1 191 19
 	movq	-136(%rbp), %rax
 	movq	%rax, -80(%rbp)
-	.loc 1 192 19
+	.loc 1 193 19
 	movq	-64(%rbp), %rax
 	movl	$30, %esi
 	movq	%rax, %rdi
 	call	ms_factory_create_filter@PLT
 	movq	%rax, -128(%rbp)
-	.loc 1 195 24
+	.loc 1 196 24
 	call	ms_ticker_new@PLT
 	movq	%rax, -120(%rbp)
-	.loc 1 198 13
+	.loc 1 199 13
 	movzbl	-71(%rbp), %eax
-	.loc 1 198 8
+	.loc 1 199 8
 	testb	%al, %al
 	je	.L28
-	.loc 1 200 6
+	.loc 1 201 6
 	movq	-152(%rbp), %rdx
 	movq	-160(%rbp), %rax
 	movl	$0, %ecx
 	movl	$0, %esi
 	movq	%rax, %rdi
 	call	ms_filter_link@PLT
-	.loc 1 202 6
+	.loc 1 203 6
 	movq	-128(%rbp), %rdx
 	movq	-152(%rbp), %rax
 	movl	$0, %ecx
 	movl	$0, %esi
 	movq	%rax, %rdi
 	call	ms_filter_link@PLT
-	.loc 1 209 5
+	.loc 1 210 5
 	leaq	-112(%rbp), %rdx
 	movq	-152(%rbp), %rax
 	movl	$983840, %esi
@@ -802,14 +807,14 @@ main:
 	call	ms_filter_call_method@PLT
 	jmp	.L29
 .L28:
-	.loc 1 215 6
+	.loc 1 216 6
 	movq	-144(%rbp), %rdx
 	movq	-176(%rbp), %rax
 	movl	$0, %ecx
 	movl	$0, %esi
 	movq	%rax, %rdi
 	call	ms_filter_link@PLT
-	.loc 1 216 6
+	.loc 1 217 6
 	movq	-128(%rbp), %rdx
 	movq	-144(%rbp), %rax
 	movl	$0, %ecx
@@ -817,32 +822,32 @@ main:
 	movq	%rax, %rdi
 	call	ms_filter_link@PLT
 .L29:
-	.loc 1 219 5
+	.loc 1 220 5
 	movq	-136(%rbp), %rdx
 	movq	-128(%rbp), %rax
 	movl	$0, %ecx
 	movl	$0, %esi
 	movq	%rax, %rdi
 	call	ms_filter_link@PLT
-	.loc 1 220 5
+	.loc 1 221 5
 	movq	-168(%rbp), %rdx
 	movq	-128(%rbp), %rax
 	movl	$0, %ecx
 	movl	$1, %esi
 	movq	%rax, %rdi
 	call	ms_filter_link@PLT
-	.loc 1 224 5
+	.loc 1 225 5
 	movq	-144(%rbp), %rdx
 	leaq	-112(%rbp), %rax
 	movq	%rdx, %rsi
 	movq	%rax, %rdi
 	call	load_script_preambula
-	.loc 1 228 13
+	.loc 1 229 13
 	movzbl	-71(%rbp), %eax
-	.loc 1 228 8
+	.loc 1 229 8
 	testb	%al, %al
 	je	.L30
-	.loc 1 230 5
+	.loc 1 231 5
 	movq	-160(%rbp), %rdx
 	movq	-120(%rbp), %rax
 	movq	%rdx, %rsi
@@ -850,112 +855,117 @@ main:
 	call	ms_ticker_attach@PLT
 	jmp	.L31
 .L30:
-	.loc 1 234 5
+	.loc 1 235 5
 	movq	-176(%rbp), %rdx
 	movq	-120(%rbp), %rax
 	movq	%rdx, %rsi
 	movq	%rax, %rdi
 	call	ms_ticker_attach@PLT
 .L31:
-	.loc 1 237 5
+	.loc 1 238 5
 	movq	-144(%rbp), %rdx
 	leaq	-112(%rbp), %rax
 	movq	%rdx, %rsi
 	movq	%rax, %rdi
 	call	load_script_body
-	.loc 1 239 14
+	.loc 1 240 14
 	movzbl	-70(%rbp), %eax
-	.loc 1 239 8
+	.loc 1 240 8
 	testb	%al, %al
 	je	.L32
-	.loc 1 239 24 discriminator 1
+	.loc 1 240 24 discriminator 1
 	movq	-136(%rbp), %rax
 	movl	$0, %edx
 	movl	$917760, %esi
 	movq	%rax, %rdi
 	call	ms_filter_call_method@PLT
 .L32:
-	.loc 1 242 13
+	.loc 1 244 13
 	movzbl	-71(%rbp), %eax
-	.loc 1 242 8
+	.loc 1 244 8
 	testb	%al, %al
 	je	.L33
-	.loc 1 246 32
-	movl	$10000, -104(%rbp)
-	.loc 1 247 33
-	movss	.LC24(%rip), %xmm0
-	movss	%xmm0, -92(%rbp)
-	.loc 1 248 37
-	movl	$0, -96(%rbp)
-	.loc 1 249 33
-	movss	.LC24(%rip), %xmm0
-	movss	%xmm0, -92(%rbp)
-	.loc 1 250 32
-	movl	$0, -88(%rbp)
-	.loc 1 251 36
-	movl	$0, -84(%rbp)
-.L33:
-	.loc 1 253 5
-	leaq	-112(%rbp), %rdx
-	movq	-152(%rbp), %rax
-	movl	$983840, %esi
+	.loc 1 247 9
+	leaq	-112(%rbp), %rax
+	movl	$8, %edx
+	leaq	.LC24(%rip), %rcx
+	movq	%rcx, %rsi
 	movq	%rax, %rdi
-	call	ms_filter_call_method@PLT
-	.loc 1 257 5
-	leaq	.LC25(%rip), %rax
+	call	strncpy@PLT
+	.loc 1 249 32
+	movl	$10000, -104(%rbp)
+	.loc 1 250 33
+	movss	.LC25(%rip), %xmm0
+	movss	%xmm0, -92(%rbp)
+	.loc 1 251 37
+	movl	$0, -96(%rbp)
+	.loc 1 252 33
+	movss	.LC25(%rip), %xmm0
+	movss	%xmm0, -92(%rbp)
+	.loc 1 253 32
+	movl	$0, -88(%rbp)
+	.loc 1 254 36
+	movl	$0, -84(%rbp)
+	.loc 1 255 9
+	movl	-104(%rbp), %eax
+	movl	%eax, %esi
+	leaq	.LC26(%rip), %rax
 	movq	%rax, %rdi
 	movl	$0, %eax
 	call	printf@PLT
-	.loc 1 258 12
-	call	getchar@PLT
-	.loc 1 258 10
-	movb	%al, -185(%rbp)
-	.loc 1 259 10
-	jmp	.L34
-.L36:
-	.loc 1 261 16
-	movzbl	-71(%rbp), %eax
-	.loc 1 261 11
-	testb	%al, %al
-	je	.L35
-	.loc 1 264 13
+.L33:
+	.loc 1 257 5
 	leaq	-112(%rbp), %rdx
 	movq	-152(%rbp), %rax
 	movl	$983840, %esi
 	movq	%rax, %rdi
 	call	ms_filter_call_method@PLT
+	.loc 1 262 5
+	leaq	.LC27(%rip), %rax
+	movq	%rax, %rdi
+	movl	$0, %eax
+	call	printf@PLT
+	.loc 1 263 12
+	call	getchar@PLT
+	.loc 1 263 10
+	movb	%al, -185(%rbp)
+	.loc 1 264 10
+	jmp	.L34
 .L35:
+	.loc 1 266 9
+	movl	$500000, %edi
+	call	ms_usleep@PLT
 	.loc 1 267 11
 	call	getchar@PLT
 	.loc 1 267 10
 	movb	%al, -185(%rbp)
-	.loc 1 268 9
-	leaq	.LC26(%rip), %rax
-	movq	%rax, %rdi
-	call	puts@PLT
 .L34:
-	.loc 1 259 13
+	.loc 1 264 13
 	cmpb	$10, -185(%rbp)
-	jne	.L36
-	.loc 1 270 13
+	jne	.L35
+	.loc 1 269 13
 	movzbl	-70(%rbp), %eax
-	.loc 1 270 8
+	.loc 1 269 8
 	testb	%al, %al
-	je	.L37
-	.loc 1 270 23 discriminator 1
+	je	.L36
+	.loc 1 272 9
 	movq	-136(%rbp), %rax
 	movl	$0, %edx
 	movl	$918272, %esi
 	movq	%rax, %rdi
 	call	ms_filter_call_method@PLT
-.L37:
+	.loc 1 273 9
+	leaq	.LC28(%rip), %rax
+	movq	%rax, %rdi
+	call	puts@PLT
+.L36:
 	movl	$0, %eax
-	.loc 1 271 1
+	.loc 1 275 1
 	movq	-8(%rbp), %rdx
 	subq	%fs:40, %rdx
-	je	.L39
+	je	.L38
 	call	__stack_chk_fail@PLT
-.L39:
+.L38:
 	leave
 	.cfi_def_cfa 7, 8
 	ret
@@ -964,7 +974,7 @@ main:
 	.size	main, .-main
 	.section	.rodata
 	.align 4
-.LC24:
+.LC25:
 	.long	1065353216
 	.text
 .Letext0:
@@ -995,19 +1005,20 @@ main:
 	.file 26 "/usr/include/mediastreamer2/devices.h"
 	.file 27 "/usr/include/mediastreamer2/mssndcard.h"
 	.file 28 "/usr/include/mediastreamer2/dtmfgen.h"
-	.file 29 "/usr/include/stdio.h"
-	.file 30 "/usr/include/string.h"
-	.file 31 "/usr/include/stdlib.h"
-	.file 32 "lua_filter.h"
+	.file 29 "/usr/include/string.h"
+	.file 30 "/usr/include/stdio.h"
+	.file 31 "/usr/include/mediastreamer2/mscommon.h"
+	.file 32 "/usr/include/stdlib.h"
+	.file 33 "lua_filter.h"
 	.section	.debug_info,"",@progbits
 .Ldebug_info0:
-	.long	0x1db4
+	.long	0x1de5
 	.value	0x5
 	.byte	0x1
 	.byte	0x8
 	.long	.Ldebug_abbrev0
-	.uleb128 0x1f
-	.long	.LASF529
+	.uleb128 0x20
+	.long	.LASF531
 	.byte	0x1d
 	.long	.LASF0
 	.long	.LASF1
@@ -1050,7 +1061,7 @@ main:
 	.byte	0x28
 	.byte	0x1c
 	.long	0x35
-	.uleb128 0x20
+	.uleb128 0x21
 	.byte	0x4
 	.byte	0x5
 	.string	"int"
@@ -1101,7 +1112,7 @@ main:
 	.byte	0xa2
 	.byte	0x12
 	.long	0x83
-	.uleb128 0x21
+	.uleb128 0x22
 	.byte	0x8
 	.uleb128 0x17
 	.long	0xd6
@@ -1147,7 +1158,7 @@ main:
 	.long	0xca
 	.byte	0x8
 	.byte	0
-	.uleb128 0x22
+	.uleb128 0x23
 	.byte	0x8
 	.byte	0x5
 	.byte	0x1c
@@ -1677,8 +1688,8 @@ main:
 	.byte	0x7
 	.byte	0x19
 	.long	0x382
-	.uleb128 0x23
-	.long	.LASF530
+	.uleb128 0x24
+	.long	.LASF532
 	.byte	0xa
 	.byte	0x2b
 	.byte	0xe
@@ -3332,7 +3343,7 @@ main:
 	.byte	0x10
 	.long	0x43
 	.value	0x108
-	.uleb128 0x24
+	.uleb128 0x25
 	.string	"run"
 	.byte	0x19
 	.byte	0x5f
@@ -4092,9 +4103,9 @@ main:
 	.byte	0x10
 	.byte	0x4
 	.long	.LASF476
-	.uleb128 0x25
-	.long	.LASF531
-	.byte	0x20
+	.uleb128 0x26
+	.long	.LASF533
+	.byte	0x21
 	.byte	0x3f
 	.byte	0x15
 	.long	0xf54
@@ -4191,33 +4202,55 @@ main:
 	.byte	0x22
 	.byte	0x1a
 	.long	0x17a6
-	.uleb128 0x26
-	.long	.LASF489
-	.byte	0x1d
+	.uleb128 0x1e
+	.long	.LASF492
+	.byte	0x1f
+	.value	0x1ca
+	.long	0x1865
+	.uleb128 0x4
+	.long	0x593
+	.byte	0
+	.uleb128 0x27
+	.long	.LASF490
+	.byte	0x1e
 	.value	0x208
 	.byte	0xc
 	.long	0x70
-	.uleb128 0xf
+	.uleb128 0xe
 	.long	.LASF487
+	.byte	0x1d
+	.byte	0x90
+	.byte	0xe
+	.long	0xdd
+	.long	0x1892
+	.uleb128 0x4
+	.long	0xdd
+	.uleb128 0x4
+	.long	0x366
+	.uleb128 0x4
+	.long	0xfa
+	.byte	0
+	.uleb128 0xe
+	.long	.LASF488
 	.byte	0x19
 	.byte	0xaa
 	.byte	0x6
 	.long	0x70
-	.long	0x187b
+	.long	0x18ad
 	.uleb128 0x4
-	.long	0x187b
+	.long	0x18ad
 	.uleb128 0x4
 	.long	0x11c3
 	.byte	0
 	.uleb128 0x5
 	.long	0x1787
 	.uleb128 0xd
-	.long	.LASF488
+	.long	.LASF489
 	.byte	0x15
 	.value	0x188
 	.byte	0x6
 	.long	0x70
-	.long	0x18a6
+	.long	0x18d8
 	.uleb128 0x4
 	.long	0x11c3
 	.uleb128 0x4
@@ -4227,141 +4260,140 @@ main:
 	.uleb128 0x4
 	.long	0x70
 	.byte	0
-	.uleb128 0x1e
-	.long	.LASF490
+	.uleb128 0x1f
+	.long	.LASF491
 	.byte	0x19
 	.byte	0x8c
 	.byte	0xc
-	.long	0x187b
-	.uleb128 0x27
-	.long	.LASF495
+	.long	0x18ad
+	.uleb128 0x28
+	.long	.LASF493
 	.byte	0x18
 	.byte	0x74
 	.byte	0x7
-	.long	0x18c9
+	.long	0x18fb
 	.uleb128 0x4
 	.long	0x126d
 	.uleb128 0x4
 	.long	0xf60
 	.byte	0
-	.uleb128 0xf
-	.long	.LASF491
+	.uleb128 0xe
+	.long	.LASF494
 	.byte	0x18
 	.byte	0xf1
 	.byte	0xc
 	.long	0x11c3
-	.long	0x18e4
+	.long	0x1916
 	.uleb128 0x4
 	.long	0x126d
 	.uleb128 0x4
 	.long	0xd34
 	.byte	0
 	.uleb128 0xd
-	.long	.LASF492
+	.long	.LASF495
 	.byte	0x1b
 	.value	0x15c
 	.byte	0x15
 	.long	0x959
-	.long	0x18fb
+	.long	0x192d
 	.uleb128 0x4
-	.long	0x18fb
+	.long	0x192d
 	.byte	0
 	.uleb128 0x5
 	.long	0x1624
 	.uleb128 0xd
-	.long	.LASF493
+	.long	.LASF496
 	.byte	0x1b
 	.value	0x153
 	.byte	0x15
 	.long	0x959
-	.long	0x1917
+	.long	0x1949
 	.uleb128 0x4
-	.long	0x18fb
+	.long	0x192d
 	.byte	0
-	.uleb128 0xf
-	.long	.LASF494
+	.uleb128 0xe
+	.long	.LASF497
 	.byte	0x1b
 	.byte	0xd6
 	.byte	0xe
-	.long	0x18fb
-	.long	0x1932
+	.long	0x192d
+	.long	0x1964
 	.uleb128 0x4
 	.long	0x1321
 	.uleb128 0x4
 	.long	0x366
 	.byte	0
-	.uleb128 0x28
-	.long	.LASF496
+	.uleb128 0x1e
+	.long	.LASF498
 	.byte	0x18
 	.value	0x146
-	.byte	0x7
-	.long	0x1945
+	.long	0x1976
 	.uleb128 0x4
 	.long	0x126d
 	.byte	0
-	.uleb128 0x1e
-	.long	.LASF497
+	.uleb128 0x1f
+	.long	.LASF499
 	.byte	0x18
 	.byte	0x47
 	.byte	0xd
 	.long	0x126d
 	.uleb128 0xd
-	.long	.LASF498
+	.long	.LASF500
 	.byte	0x1b
 	.value	0x19e
 	.byte	0xe
 	.long	0x366
-	.long	0x1968
+	.long	0x1999
 	.uleb128 0x4
-	.long	0x18fb
+	.long	0x192d
 	.byte	0
 	.uleb128 0xd
-	.long	.LASF499
+	.long	.LASF501
 	.byte	0x12
 	.value	0x12b
 	.byte	0x8
 	.long	0xd6
-	.long	0x197f
+	.long	0x19b0
 	.uleb128 0x4
 	.long	0xfa
 	.byte	0
-	.uleb128 0xf
-	.long	.LASF500
+	.uleb128 0xe
+	.long	.LASF502
 	.byte	0x11
 	.byte	0x35
 	.byte	0x9
 	.long	0xfa
-	.long	0x1995
+	.long	0x19c6
 	.uleb128 0x4
 	.long	0x11c8
 	.byte	0
 	.uleb128 0xd
-	.long	.LASF501
+	.long	.LASF503
 	.byte	0x1b
 	.value	0x10e
 	.byte	0x17
 	.long	0x11c8
-	.long	0x19ac
+	.long	0x19dd
 	.uleb128 0x4
 	.long	0x1321
 	.byte	0
-	.uleb128 0xf
-	.long	.LASF502
+	.uleb128 0xe
+	.long	.LASF504
 	.byte	0x18
 	.byte	0x69
 	.byte	0x1c
 	.long	0x123d
-	.long	0x19c2
+	.long	0x19f3
 	.uleb128 0x4
 	.long	0x126d
 	.byte	0
 	.uleb128 0xd
-	.long	.LASF503
+	.long	.LASF505
 	.byte	0x15
 	.value	0x19f
 	.byte	0x6
 	.long	0x70
-	.long	0x19e3
+	.long	0x1a14
 	.uleb128 0x4
 	.long	0x11c3
 	.uleb128 0x4
@@ -4369,23 +4401,23 @@ main:
 	.uleb128 0x4
 	.long	0xd6
 	.byte	0
-	.uleb128 0xf
-	.long	.LASF504
-	.byte	0x1d
+	.uleb128 0xe
+	.long	.LASF506
+	.byte	0x1e
 	.byte	0xb2
 	.byte	0xc
 	.long	0x70
-	.long	0x19f9
+	.long	0x1a2a
 	.uleb128 0x4
 	.long	0x565
 	.byte	0
 	.uleb128 0xd
-	.long	.LASF505
-	.byte	0x1d
+	.long	.LASF507
+	.byte	0x1e
 	.value	0x2a3
 	.byte	0xf
 	.long	0xfa
-	.long	0x1a1f
+	.long	0x1a50
 	.uleb128 0x4
 	.long	0xd8
 	.uleb128 0x4
@@ -4395,13 +4427,13 @@ main:
 	.uleb128 0x4
 	.long	0x56a
 	.byte	0
-	.uleb128 0xf
-	.long	.LASF506
-	.byte	0x1e
+	.uleb128 0xe
+	.long	.LASF508
+	.byte	0x1d
 	.byte	0x3d
 	.byte	0xe
 	.long	0xd6
-	.long	0x1a3f
+	.long	0x1a70
 	.uleb128 0x4
 	.long	0xd6
 	.uleb128 0x4
@@ -4410,147 +4442,147 @@ main:
 	.long	0xfa
 	.byte	0
 	.uleb128 0xd
-	.long	.LASF507
-	.byte	0x1d
+	.long	.LASF509
+	.byte	0x1e
 	.value	0x102
 	.byte	0xe
 	.long	0x565
-	.long	0x1a5b
+	.long	0x1a8c
 	.uleb128 0x4
 	.long	0x36b
 	.uleb128 0x4
 	.long	0x36b
 	.byte	0
-	.uleb128 0xf
-	.long	.LASF508
-	.byte	0x1f
+	.uleb128 0xe
+	.long	.LASF510
+	.byte	0x20
 	.byte	0x69
 	.byte	0xc
 	.long	0x70
-	.long	0x1a71
+	.long	0x1aa2
 	.uleb128 0x4
 	.long	0x366
 	.byte	0
 	.uleb128 0xd
-	.long	.LASF509
+	.long	.LASF511
 	.byte	0x12
 	.value	0x12f
 	.byte	0x9
 	.long	0xdd
-	.long	0x1a88
+	.long	0x1ab9
 	.uleb128 0x4
 	.long	0x366
 	.byte	0
 	.uleb128 0x29
-	.long	.LASF510
-	.byte	0x1f
+	.long	.LASF512
+	.byte	0x20
 	.value	0x270
 	.byte	0xd
-	.long	0x1a9b
+	.long	0x1acc
 	.uleb128 0x4
 	.long	0x70
 	.byte	0
 	.uleb128 0xd
-	.long	.LASF511
-	.byte	0x1d
+	.long	.LASF513
+	.byte	0x1e
 	.value	0x164
 	.byte	0xc
 	.long	0x70
-	.long	0x1ab3
+	.long	0x1ae4
 	.uleb128 0x4
 	.long	0x366
 	.uleb128 0x2a
 	.byte	0
-	.uleb128 0xf
-	.long	.LASF512
-	.byte	0x1e
+	.uleb128 0xe
+	.long	.LASF514
+	.byte	0x1d
 	.byte	0x9c
 	.byte	0xc
 	.long	0x70
-	.long	0x1ace
+	.long	0x1aff
 	.uleb128 0x4
 	.long	0x366
 	.uleb128 0x4
 	.long	0x366
 	.byte	0
 	.uleb128 0x2b
-	.long	.LASF532
+	.long	.LASF534
 	.byte	0x1
-	.byte	0x9e
+	.byte	0x9f
 	.byte	0x5
 	.long	0x70
 	.quad	.LFB24
 	.quad	.LFE24-.LFB24
 	.uleb128 0x1
 	.byte	0x9c
-	.long	0x1bb4
+	.long	0x1be5
 	.uleb128 0x14
-	.long	.LASF513
-	.byte	0x9e
+	.long	.LASF515
+	.byte	0x9f
 	.byte	0xe
 	.long	0x70
 	.uleb128 0x3
 	.byte	0x91
 	.sleb128 -212
 	.uleb128 0x14
-	.long	.LASF514
-	.byte	0x9e
+	.long	.LASF516
+	.byte	0x9f
 	.byte	0x1a
 	.long	0x37d
 	.uleb128 0x3
 	.byte	0x91
 	.sleb128 -224
 	.uleb128 0x7
-	.long	.LASF515
-	.byte	0xa1
+	.long	.LASF517
+	.byte	0xa2
 	.byte	0xe
 	.long	0x1847
 	.uleb128 0x3
 	.byte	0x91
 	.sleb128 -128
 	.uleb128 0x7
-	.long	.LASF516
-	.byte	0xae
+	.long	.LASF518
+	.byte	0xaf
 	.byte	0x10
-	.long	0x18fb
+	.long	0x192d
 	.uleb128 0x3
 	.byte	0x91
 	.sleb128 -200
 	.uleb128 0x7
-	.long	.LASF517
-	.byte	0xb1
+	.long	.LASF519
+	.byte	0xb2
 	.byte	0xf
 	.long	0x11c3
 	.uleb128 0x3
 	.byte	0x91
 	.sleb128 -192
 	.uleb128 0x7
-	.long	.LASF518
-	.byte	0xb2
+	.long	.LASF520
+	.byte	0xb3
 	.byte	0xf
 	.long	0x11c3
 	.uleb128 0x3
 	.byte	0x91
 	.sleb128 -184
 	.uleb128 0x7
-	.long	.LASF519
-	.byte	0xb4
+	.long	.LASF521
+	.byte	0xb5
 	.byte	0xf
 	.long	0x11c3
 	.uleb128 0x3
 	.byte	0x91
 	.sleb128 -176
 	.uleb128 0x7
-	.long	.LASF520
-	.byte	0xb5
+	.long	.LASF522
+	.byte	0xb6
 	.byte	0xf
 	.long	0x11c3
 	.uleb128 0x3
 	.byte	0x91
 	.sleb128 -168
 	.uleb128 0x7
-	.long	.LASF521
-	.byte	0xba
+	.long	.LASF523
+	.byte	0xbb
 	.byte	0xf
 	.long	0x11c3
 	.uleb128 0x3
@@ -4558,15 +4590,15 @@ main:
 	.sleb128 -160
 	.uleb128 0x7
 	.long	.LASF479
-	.byte	0xbd
+	.byte	0xbe
 	.byte	0xf
 	.long	0x11c3
 	.uleb128 0x3
 	.byte	0x91
 	.sleb128 -152
-	.uleb128 0xe
+	.uleb128 0xf
 	.string	"tee"
-	.byte	0xc0
+	.byte	0xc1
 	.byte	0xf
 	.long	0x11c3
 	.uleb128 0x3
@@ -4574,16 +4606,16 @@ main:
 	.sleb128 -144
 	.uleb128 0x7
 	.long	.LASF154
-	.byte	0xc3
+	.byte	0xc4
 	.byte	0xf
-	.long	0x187b
+	.long	0x18ad
 	.uleb128 0x3
 	.byte	0x91
 	.sleb128 -136
 	.uleb128 0x2c
 	.string	"c"
 	.byte	0x1
-	.value	0x102
+	.value	0x107
 	.byte	0xa
 	.long	0xe2
 	.uleb128 0x3
@@ -4591,40 +4623,40 @@ main:
 	.sleb128 -201
 	.byte	0
 	.uleb128 0x18
-	.long	.LASF524
-	.byte	0x8d
+	.long	.LASF526
+	.byte	0x8e
 	.quad	.LFB23
 	.quad	.LFE23-.LFB23
 	.uleb128 0x1
 	.byte	0x9c
-	.long	0x1c06
+	.long	0x1c37
 	.uleb128 0x16
 	.string	"v"
-	.byte	0x8d
+	.byte	0x8e
 	.byte	0x2f
-	.long	0x1c06
+	.long	0x1c37
 	.uleb128 0x3
 	.byte	0x91
 	.sleb128 -72
 	.uleb128 0x7
-	.long	.LASF522
-	.byte	0x8f
+	.long	.LASF524
+	.byte	0x90
 	.byte	0x9
 	.long	0xfa
 	.uleb128 0x2
 	.byte	0x91
 	.sleb128 -40
-	.uleb128 0xe
+	.uleb128 0xf
 	.string	"i"
-	.byte	0x90
+	.byte	0x91
 	.byte	0x6
 	.long	0x70
 	.uleb128 0x2
 	.byte	0x91
 	.sleb128 -52
 	.uleb128 0x7
-	.long	.LASF523
-	.byte	0x91
+	.long	.LASF525
+	.byte	0x92
 	.byte	0x16
 	.long	0x11c8
 	.uleb128 0x2
@@ -4634,48 +4666,48 @@ main:
 	.uleb128 0x5
 	.long	0x1847
 	.uleb128 0x18
-	.long	.LASF525
-	.byte	0x75
+	.long	.LASF527
+	.byte	0x76
 	.quad	.LFB22
 	.quad	.LFE22-.LFB22
 	.uleb128 0x1
 	.byte	0x9c
-	.long	0x1c90
+	.long	0x1cc1
 	.uleb128 0x16
 	.string	"v"
-	.byte	0x75
+	.byte	0x76
 	.byte	0x2d
-	.long	0x1c06
+	.long	0x1c37
 	.uleb128 0x3
 	.byte	0x91
 	.sleb128 -1096
 	.uleb128 0x14
 	.long	.LASF146
-	.byte	0x75
+	.byte	0x76
 	.byte	0x3a
 	.long	0x11c3
 	.uleb128 0x3
 	.byte	0x91
 	.sleb128 -1104
-	.uleb128 0xe
+	.uleb128 0xf
 	.string	"f"
-	.byte	0x78
+	.byte	0x79
 	.byte	0xb
 	.long	0x565
 	.uleb128 0x3
 	.byte	0x91
 	.sleb128 -1072
-	.uleb128 0xe
+	.uleb128 0xf
 	.string	"buf"
-	.byte	0x79
+	.byte	0x7a
 	.byte	0xa
-	.long	0x1c90
+	.long	0x1cc1
 	.uleb128 0x3
 	.byte	0x91
 	.sleb128 -1056
 	.uleb128 0x7
-	.long	.LASF526
-	.byte	0x7b
+	.long	.LASF528
+	.byte	0x7c
 	.byte	0xc
 	.long	0xfa
 	.uleb128 0x3
@@ -4684,9 +4716,9 @@ main:
 	.uleb128 0x19
 	.quad	.LBB5
 	.quad	.LBE5-.LBB5
-	.uleb128 0xe
+	.uleb128 0xf
 	.string	"cpy"
-	.byte	0x81
+	.byte	0x82
 	.byte	0xf
 	.long	0xdd
 	.uleb128 0x3
@@ -4696,24 +4728,24 @@ main:
 	.byte	0
 	.uleb128 0xa
 	.long	0xe2
-	.long	0x1ca1
+	.long	0x1cd2
 	.uleb128 0x2d
 	.long	0x43
 	.value	0x400
 	.byte	0
 	.uleb128 0x18
-	.long	.LASF527
+	.long	.LASF529
 	.byte	0x5e
 	.quad	.LFB21
 	.quad	.LFE21-.LFB21
 	.uleb128 0x1
 	.byte	0x9c
-	.long	0x1d26
+	.long	0x1d57
 	.uleb128 0x16
 	.string	"v"
 	.byte	0x5e
 	.byte	0x28
-	.long	0x1c06
+	.long	0x1c37
 	.uleb128 0x3
 	.byte	0x91
 	.sleb128 -1096
@@ -4725,7 +4757,7 @@ main:
 	.uleb128 0x3
 	.byte	0x91
 	.sleb128 -1104
-	.uleb128 0xe
+	.uleb128 0xf
 	.string	"f"
 	.byte	0x61
 	.byte	0xb
@@ -4733,16 +4765,16 @@ main:
 	.uleb128 0x3
 	.byte	0x91
 	.sleb128 -1072
-	.uleb128 0xe
+	.uleb128 0xf
 	.string	"buf"
 	.byte	0x62
 	.byte	0xa
-	.long	0x1c90
+	.long	0x1cc1
 	.uleb128 0x3
 	.byte	0x91
 	.sleb128 -1056
 	.uleb128 0x7
-	.long	.LASF526
+	.long	.LASF528
 	.byte	0x64
 	.byte	0xc
 	.long	0xfa
@@ -4752,7 +4784,7 @@ main:
 	.uleb128 0x19
 	.quad	.LBB4
 	.quad	.LBE4-.LBB4
-	.uleb128 0xe
+	.uleb128 0xf
 	.string	"cpy"
 	.byte	0x6a
 	.byte	0xf
@@ -4763,7 +4795,7 @@ main:
 	.byte	0
 	.byte	0
 	.uleb128 0x2e
-	.long	.LASF533
+	.long	.LASF535
 	.byte	0x1
 	.byte	0x28
 	.byte	0x6
@@ -4772,7 +4804,7 @@ main:
 	.uleb128 0x1
 	.byte	0x9c
 	.uleb128 0x14
-	.long	.LASF513
+	.long	.LASF515
 	.byte	0x28
 	.byte	0x14
 	.long	0x70
@@ -4780,7 +4812,7 @@ main:
 	.byte	0x91
 	.sleb128 -36
 	.uleb128 0x14
-	.long	.LASF514
+	.long	.LASF516
 	.byte	0x28
 	.byte	0x20
 	.long	0x37d
@@ -4791,11 +4823,11 @@ main:
 	.string	"v"
 	.byte	0x28
 	.byte	0x32
-	.long	0x1c06
+	.long	0x1c37
 	.uleb128 0x2
 	.byte	0x91
 	.sleb128 -56
-	.uleb128 0xe
+	.uleb128 0xf
 	.string	"i"
 	.byte	0x2a
 	.byte	0x9
@@ -4806,8 +4838,8 @@ main:
 	.uleb128 0x2f
 	.quad	.LBB2
 	.quad	.LBE2-.LBB2
-	.long	0x1d96
-	.uleb128 0xe
+	.long	0x1dc7
+	.uleb128 0xf
 	.string	"p"
 	.byte	0x2f
 	.byte	0x13
@@ -4820,7 +4852,7 @@ main:
 	.quad	.LBB3
 	.quad	.LBE3-.LBB3
 	.uleb128 0x7
-	.long	.LASF528
+	.long	.LASF530
 	.byte	0x4f
 	.byte	0x11
 	.long	0x70
@@ -5010,24 +5042,6 @@ main:
 	.byte	0
 	.byte	0
 	.uleb128 0xe
-	.uleb128 0x34
-	.byte	0
-	.uleb128 0x3
-	.uleb128 0x8
-	.uleb128 0x3a
-	.uleb128 0x21
-	.sleb128 1
-	.uleb128 0x3b
-	.uleb128 0xb
-	.uleb128 0x39
-	.uleb128 0xb
-	.uleb128 0x49
-	.uleb128 0x13
-	.uleb128 0x2
-	.uleb128 0x18
-	.byte	0
-	.byte	0
-	.uleb128 0xf
 	.uleb128 0x2e
 	.byte	0x1
 	.uleb128 0x3f
@@ -5048,6 +5062,24 @@ main:
 	.uleb128 0x19
 	.uleb128 0x1
 	.uleb128 0x13
+	.byte	0
+	.byte	0
+	.uleb128 0xf
+	.uleb128 0x34
+	.byte	0
+	.uleb128 0x3
+	.uleb128 0x8
+	.uleb128 0x3a
+	.uleb128 0x21
+	.sleb128 1
+	.uleb128 0x3b
+	.uleb128 0xb
+	.uleb128 0x39
+	.uleb128 0xb
+	.uleb128 0x49
+	.uleb128 0x13
+	.uleb128 0x2
+	.uleb128 0x18
 	.byte	0
 	.byte	0
 	.uleb128 0x10
@@ -5254,6 +5286,28 @@ main:
 	.byte	0
 	.uleb128 0x1e
 	.uleb128 0x2e
+	.byte	0x1
+	.uleb128 0x3f
+	.uleb128 0x19
+	.uleb128 0x3
+	.uleb128 0xe
+	.uleb128 0x3a
+	.uleb128 0xb
+	.uleb128 0x3b
+	.uleb128 0x5
+	.uleb128 0x39
+	.uleb128 0x21
+	.sleb128 7
+	.uleb128 0x27
+	.uleb128 0x19
+	.uleb128 0x3c
+	.uleb128 0x19
+	.uleb128 0x1
+	.uleb128 0x13
+	.byte	0
+	.byte	0
+	.uleb128 0x1f
+	.uleb128 0x2e
 	.byte	0
 	.uleb128 0x3f
 	.uleb128 0x19
@@ -5273,7 +5327,7 @@ main:
 	.uleb128 0x19
 	.byte	0
 	.byte	0
-	.uleb128 0x1f
+	.uleb128 0x20
 	.uleb128 0x11
 	.byte	0x1
 	.uleb128 0x25
@@ -5292,7 +5346,7 @@ main:
 	.uleb128 0x17
 	.byte	0
 	.byte	0
-	.uleb128 0x20
+	.uleb128 0x21
 	.uleb128 0x24
 	.byte	0
 	.uleb128 0xb
@@ -5303,14 +5357,14 @@ main:
 	.uleb128 0x8
 	.byte	0
 	.byte	0
-	.uleb128 0x21
+	.uleb128 0x22
 	.uleb128 0xf
 	.byte	0
 	.uleb128 0xb
 	.uleb128 0xb
 	.byte	0
 	.byte	0
-	.uleb128 0x22
+	.uleb128 0x23
 	.uleb128 0x13
 	.byte	0x1
 	.uleb128 0xb
@@ -5325,7 +5379,7 @@ main:
 	.uleb128 0x13
 	.byte	0
 	.byte	0
-	.uleb128 0x23
+	.uleb128 0x24
 	.uleb128 0x16
 	.byte	0
 	.uleb128 0x3
@@ -5338,7 +5392,7 @@ main:
 	.uleb128 0xb
 	.byte	0
 	.byte	0
-	.uleb128 0x24
+	.uleb128 0x25
 	.uleb128 0xd
 	.byte	0
 	.uleb128 0x3
@@ -5355,7 +5409,7 @@ main:
 	.uleb128 0x5
 	.byte	0
 	.byte	0
-	.uleb128 0x25
+	.uleb128 0x26
 	.uleb128 0x34
 	.byte	0
 	.uleb128 0x3
@@ -5374,7 +5428,7 @@ main:
 	.uleb128 0x19
 	.byte	0
 	.byte	0
-	.uleb128 0x26
+	.uleb128 0x27
 	.uleb128 0x2e
 	.byte	0
 	.uleb128 0x3f
@@ -5395,27 +5449,6 @@ main:
 	.uleb128 0x19
 	.byte	0
 	.byte	0
-	.uleb128 0x27
-	.uleb128 0x2e
-	.byte	0x1
-	.uleb128 0x3f
-	.uleb128 0x19
-	.uleb128 0x3
-	.uleb128 0xe
-	.uleb128 0x3a
-	.uleb128 0xb
-	.uleb128 0x3b
-	.uleb128 0xb
-	.uleb128 0x39
-	.uleb128 0xb
-	.uleb128 0x27
-	.uleb128 0x19
-	.uleb128 0x3c
-	.uleb128 0x19
-	.uleb128 0x1
-	.uleb128 0x13
-	.byte	0
-	.byte	0
 	.uleb128 0x28
 	.uleb128 0x2e
 	.byte	0x1
@@ -5426,7 +5459,7 @@ main:
 	.uleb128 0x3a
 	.uleb128 0xb
 	.uleb128 0x3b
-	.uleb128 0x5
+	.uleb128 0xb
 	.uleb128 0x39
 	.uleb128 0xb
 	.uleb128 0x27
@@ -5586,7 +5619,7 @@ main:
 	.string	"_fileno"
 .LASF33:
 	.string	"__pthread_mutex_s"
-.LASF487:
+.LASF488:
 	.string	"ms_ticker_attach"
 .LASF381:
 	.string	"av_load"
@@ -5678,15 +5711,15 @@ main:
 	.string	"MS_PCAP_FILE_PLAYER_ID"
 .LASF247:
 	.string	"MY_FILTER_ID"
-.LASF529:
+.LASF531:
 	.string	"GNU C17 11.3.0 -mms-bitfields -mtune=generic -march=x86-64 -ggdb -ggdb -fasynchronous-unwind-tables -fstack-protector-strong -fstack-clash-protection -fcf-protection"
 .LASF365:
 	.string	"image_resources_dir"
-.LASF523:
+.LASF525:
 	.string	"elem"
 .LASF144:
 	.string	"queue_t"
-.LASF508:
+.LASF510:
 	.string	"atoi"
 .LASF480:
 	.string	"file_is_open"
@@ -5698,7 +5731,7 @@ main:
 	.string	"MS_IOUNIT_READ_ID"
 .LASF50:
 	.string	"pthread_t"
-.LASF531:
+.LASF533:
 	.string	"lua_filter_desc"
 .LASF305:
 	.string	"MS_MEDIACODEC_H265_ENC_ID"
@@ -5754,9 +5787,9 @@ main:
 	.string	"MS_WINSNDDS_READ_ID"
 .LASF460:
 	.string	"frequencies"
-.LASF533:
+.LASF535:
 	.string	"scan_args"
-.LASF528:
+.LASF530:
 	.string	"freq"
 .LASF333:
 	.string	"bp_elapsed"
@@ -5770,7 +5803,7 @@ main:
 	.string	"__lock"
 .LASF32:
 	.string	"__pthread_list_t"
-.LASF505:
+.LASF507:
 	.string	"fread"
 .LASF429:
 	.string	"MSSndCardUnloadFunc"
@@ -5782,11 +5815,11 @@ main:
 	.string	"ninputs"
 .LASF475:
 	.string	"MSTicker"
-.LASF521:
+.LASF523:
 	.string	"lua_filter"
 .LASF390:
 	.string	"_MSVideoPresetsManager"
-.LASF517:
+.LASF519:
 	.string	"snd_card_read"
 .LASF372:
 	.string	"thread"
@@ -5794,13 +5827,13 @@ main:
 	.string	"mblk_t"
 .LASF392:
 	.string	"_MSSndCardManager"
-.LASF503:
+.LASF505:
 	.string	"ms_filter_call_method"
 .LASF276:
 	.string	"MS_AAC_ELD_DEC_ID"
 .LASF201:
 	.string	"MS_MPEG4_DEC_ID"
-.LASF519:
+.LASF521:
 	.string	"voidsource"
 .LASF315:
 	.string	"mean"
@@ -5812,7 +5845,7 @@ main:
 	.string	"MS_VP8_DEC_ID"
 .LASF328:
 	.string	"MS_FILTER_ENCODING_CAPTURER"
-.LASF526:
+.LASF528:
 	.string	"read_res"
 .LASF241:
 	.string	"MS_QRCODE_READER_ID"
@@ -5844,7 +5877,7 @@ main:
 	.string	"b_datap"
 .LASF54:
 	.string	"pthread_mutex_t"
-.LASF530:
+.LASF532:
 	.string	"_IO_lock_t"
 .LASF312:
 	.string	"float"
@@ -5854,7 +5887,7 @@ main:
 	.string	"MS_ANDROID_OPENGL_DISPLAY_ID"
 .LASF264:
 	.string	"MS_G726_16_DEC_ID"
-.LASF491:
+.LASF494:
 	.string	"ms_factory_create_filter"
 .LASF432:
 	.string	"MSSndCardAudioRouteFunc"
@@ -5862,7 +5895,7 @@ main:
 	.string	"_MSUBoxPlot"
 .LASF481:
 	.string	"en_gen"
-.LASF527:
+.LASF529:
 	.string	"load_script_body"
 .LASF242:
 	.string	"MS_X11VIDEO_ID"
@@ -5908,15 +5941,17 @@ main:
 	.string	"MS_V4L_ID"
 .LASF64:
 	.string	"_IO_write_ptr"
-.LASF525:
+.LASF527:
 	.string	"load_script_preambula"
 .LASF189:
 	.string	"MS_WINSND_READ_ID"
+.LASF487:
+	.string	"strncpy"
 .LASF16:
 	.string	"__suseconds_t"
 .LASF289:
 	.string	"MS_VT_H264_DEC_ID"
-.LASF510:
+.LASF512:
 	.string	"exit"
 .LASF477:
 	.string	"_app_vars"
@@ -5928,7 +5963,7 @@ main:
 	.string	"MS_UDP_SEND_ID"
 .LASF100:
 	.string	"__ss_align"
-.LASF493:
+.LASF496:
 	.string	"ms_snd_card_create_reader"
 .LASF52:
 	.string	"__size"
@@ -5958,7 +5993,7 @@ main:
 	.string	"uint8_t"
 .LASF310:
 	.string	"MS_ANDROID_TEXTURE_DISPLAY_ID"
-.LASF518:
+.LASF520:
 	.string	"snd_card_write"
 .LASF422:
 	.string	"MSSndCardGetLevelFunc"
@@ -5998,7 +6033,7 @@ main:
 	.string	"b_cont"
 .LASF336:
 	.string	"text"
-.LASF494:
+.LASF497:
 	.string	"ms_snd_card_manager_get_card"
 .LASF82:
 	.string	"_wide_data"
@@ -6010,7 +6045,7 @@ main:
 	.string	"MSSndCardInitFunc"
 .LASF108:
 	.string	"__in6_u"
-.LASF498:
+.LASF500:
 	.string	"ms_snd_card_get_string_id"
 .LASF29:
 	.string	"__pthread_internal_list"
@@ -6056,7 +6091,7 @@ main:
 	.string	"recorder"
 .LASF330:
 	.string	"MSFilterCategory"
-.LASF504:
+.LASF506:
 	.string	"fclose"
 .LASF104:
 	.string	"__u6_addr8"
@@ -6064,7 +6099,7 @@ main:
 	.string	"MS_VP8_ENC_ID"
 .LASF233:
 	.string	"MS_ITC_SOURCE_ID"
-.LASF520:
+.LASF522:
 	.string	"dtmfgen"
 .LASF107:
 	.string	"in6_addr"
@@ -6082,13 +6117,13 @@ main:
 	.string	"MS_SND_CARD_MASTER"
 .LASF217:
 	.string	"MS_MIRE_ID"
-.LASF516:
+.LASF518:
 	.string	"snd_card"
 .LASF298:
 	.string	"MS_OGL_ID"
 .LASF163:
 	.string	"MS_FILTER_NOT_SET_ID"
-.LASF506:
+.LASF508:
 	.string	"memset"
 .LASF253:
 	.string	"MS_G726_40_ENC_ID"
@@ -6136,11 +6171,11 @@ main:
 	.string	"__elision"
 .LASF269:
 	.string	"MS_L16_ENC_ID"
-.LASF500:
+.LASF502:
 	.string	"bctbx_list_size"
 .LASF119:
 	.string	"ipi6_addr"
-.LASF501:
+.LASF503:
 	.string	"ms_snd_card_manager_get_list"
 .LASF344:
 	.string	"postprocess"
@@ -6178,7 +6213,7 @@ main:
 	.string	"cur_time_lock"
 .LASF67:
 	.string	"_IO_buf_end"
-.LASF490:
+.LASF491:
 	.string	"ms_ticker_new"
 .LASF349:
 	.string	"_MSFactory"
@@ -6214,7 +6249,7 @@ main:
 	.string	"tone_name"
 .LASF11:
 	.string	"long int"
-.LASF492:
+.LASF495:
 	.string	"ms_snd_card_create_writer"
 .LASF138:
 	.string	"ttl_or_hl"
@@ -6240,7 +6275,7 @@ main:
 	.string	"MS_MKV_RECORDER_ID"
 .LASF190:
 	.string	"MS_WINSND_WRITE_ID"
-.LASF488:
+.LASF489:
 	.string	"ms_filter_link"
 .LASF367:
 	.string	"expected_video_bandwidth"
@@ -6274,7 +6309,7 @@ main:
 	.string	"bool_t"
 .LASF414:
 	.string	"_MSSndCard"
-.LASF522:
+.LASF524:
 	.string	"ndev"
 .LASF474:
 	.string	"MSTickerLateEvent"
@@ -6382,13 +6417,13 @@ main:
 	.string	"double"
 .LASF280:
 	.string	"MS_QSA_WRITE_ID"
-.LASF509:
+.LASF511:
 	.string	"ortp_strdup"
 .LASF208:
 	.string	"MS_SNOW_ENC_ID"
 .LASF49:
 	.string	"__g_signals"
-.LASF513:
+.LASF515:
 	.string	"argc"
 .LASF179:
 	.string	"MS_SPEEX_ENC_ID"
@@ -6396,7 +6431,7 @@ main:
 	.string	"MS_VOID_SINK_ID"
 .LASF263:
 	.string	"MS_G726_24_DEC_ID"
-.LASF514:
+.LASF516:
 	.string	"argv"
 .LASF225:
 	.string	"MS_JPEG_DEC_ID"
@@ -6408,7 +6443,7 @@ main:
 	.string	"wbcmanager"
 .LASF10:
 	.string	"__uint32_t"
-.LASF511:
+.LASF513:
 	.string	"printf"
 .LASF354:
 	.string	"platform_tags"
@@ -6436,7 +6471,7 @@ main:
 	.string	"b_prev"
 .LASF185:
 	.string	"MS_H263_ENC_ID"
-.LASF499:
+.LASF501:
 	.string	"ortp_malloc"
 .LASF361:
 	.string	"voip_uninit_func"
@@ -6482,7 +6517,7 @@ main:
 	.string	"MSFilter"
 .LASF188:
 	.string	"MS_ARTS_WRITE_ID"
-.LASF507:
+.LASF509:
 	.string	"fopen"
 .LASF448:
 	.string	"audio_route_changed"
@@ -6494,7 +6529,7 @@ main:
 	.string	"_IO_read_ptr"
 .LASF215:
 	.string	"MS_H263_OLD_DEC_ID"
-.LASF496:
+.LASF498:
 	.string	"ms_factory_init_voip"
 .LASF388:
 	.string	"MSDevicesInfo"
@@ -6502,13 +6537,13 @@ main:
 	.string	"_freeres_list"
 .LASF284:
 	.string	"MS_BB10_DISPLAY_ID"
-.LASF515:
+.LASF517:
 	.string	"vars"
 .LASF472:
 	.string	"lateMs"
 .LASF285:
 	.string	"MS_BB10_CAPTURE_ID"
-.LASF502:
+.LASF504:
 	.string	"ms_factory_get_snd_card_manager"
 .LASF43:
 	.string	"__wseq"
@@ -6538,9 +6573,9 @@ main:
 	.string	"__pthread_cond_s"
 .LASF350:
 	.string	"desc_list"
-.LASF489:
+.LASF490:
 	.string	"getchar"
-.LASF524:
+.LASF526:
 	.string	"build_sound_cards_table"
 .LASF154:
 	.string	"ticker"
@@ -6554,7 +6589,7 @@ main:
 	.string	"MS_WASAPI_READ_ID"
 .LASF470:
 	.string	"MSTickerPrio"
-.LASF497:
+.LASF499:
 	.string	"ms_factory_new"
 .LASF396:
 	.string	"MSFactory"
@@ -6570,7 +6605,7 @@ main:
 	.string	"offer_answer_provider_list"
 .LASF234:
 	.string	"MS_EXT_DISPLAY_ID"
-.LASF532:
+.LASF534:
 	.string	"main"
 .LASF351:
 	.string	"stats_list"
@@ -6590,7 +6625,7 @@ main:
 	.string	"MSFilterDesc"
 .LASF471:
 	.string	"_MSTickerLateEvent"
-.LASF495:
+.LASF493:
 	.string	"ms_factory_register_filter"
 .LASF117:
 	.string	"ortp_cond_t"
@@ -6606,7 +6641,7 @@ main:
 	.string	"MS_SND_CARD_STREAM_RING"
 .LASF180:
 	.string	"MS_SPEEX_DEC_ID"
-.LASF512:
+.LASF514:
 	.string	"strcmp"
 .LASF7:
 	.string	"short int"
@@ -6636,6 +6671,8 @@ main:
 	.string	"flags"
 .LASF252:
 	.string	"MS_G722_DEC_ID"
+.LASF492:
+	.string	"ms_usleep"
 	.section	.debug_line_str,"MS",@progbits,1
 .LASF0:
 	.string	"lua_filter_demo.c"

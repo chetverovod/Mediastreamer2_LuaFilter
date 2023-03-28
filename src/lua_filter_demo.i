@@ -9684,7 +9684,8 @@ static void load_script_body(app_vars *v, MSFilter* filter)
     }
     else
     {
-        printf("Script's body <%s> is out of buffer, dropped.\n", v->script_body_name);
+        printf("Script's body <%s> is out of buffer, dropped.\n",
+                v->script_body_name);
     }
 }
 
@@ -9703,26 +9704,26 @@ static void load_script_preambula(app_vars *v, MSFilter* filter)
         printf("Script's preambula <%s>: <\n%s\n> will be loaded to lua-filter.\n",
                   v -> script_preambula_name, buf);
         char* cpy = 
-# 129 "lua_filter_demo.c" 3 4
+# 130 "lua_filter_demo.c" 3 4
                    ortp_strdup 
-# 129 "lua_filter_demo.c"
+# 130 "lua_filter_demo.c"
                              (buf);
         ms_filter_call_method(filter, 
-# 130 "lua_filter_demo.c" 3 4
+# 131 "lua_filter_demo.c" 3 4
                                      (unsigned int)(((((unsigned int)(
-# 130 "lua_filter_demo.c"
+# 131 "lua_filter_demo.c"
                                      4001
-# 130 "lua_filter_demo.c" 3 4
+# 131 "lua_filter_demo.c" 3 4
                                      )) & 0xFFFF)<<16) | (((unsigned int)(
-# 130 "lua_filter_demo.c"
+# 131 "lua_filter_demo.c"
                                      2
-# 130 "lua_filter_demo.c" 3 4
+# 131 "lua_filter_demo.c" 3 4
                                      ))<<8) | (((unsigned int)sizeof(
-# 130 "lua_filter_demo.c"
+# 131 "lua_filter_demo.c"
                                      char
-# 130 "lua_filter_demo.c" 3 4
+# 131 "lua_filter_demo.c" 3 4
                                      )) & 0xFF))
-# 130 "lua_filter_demo.c"
+# 131 "lua_filter_demo.c"
                                                             , &cpy);
     }
     else
@@ -9742,22 +9743,22 @@ static void build_sound_cards_table(app_vars *v)
   ms_snd_card_manager_get_list(ms_factory_get_snd_card_manager(v -> mf));
  ndev = bctbx_list_size(elem);
  v -> cards = 
-# 148 "lua_filter_demo.c" 3 4
+# 149 "lua_filter_demo.c" 3 4
              ortp_malloc
-# 148 "lua_filter_demo.c"
+# 149 "lua_filter_demo.c"
                       ((ndev + 1)*sizeof(const char *));
  for ( i = 0; elem != 
-# 149 "lua_filter_demo.c" 3 4
+# 150 "lua_filter_demo.c" 3 4
                      ((void *)0)
-# 149 "lua_filter_demo.c"
+# 150 "lua_filter_demo.c"
                          ; elem = elem->next, i++)
  {
   v -> cards[i] = ms_snd_card_get_string_id((MSSndCard *)elem -> data);
  }
  v -> cards[ndev] = 
-# 153 "lua_filter_demo.c" 3 4
+# 154 "lua_filter_demo.c" 3 4
                    ((void *)0)
-# 153 "lua_filter_demo.c"
+# 154 "lua_filter_demo.c"
                        ;
  v -> cards_count = ndev;
 }
@@ -9815,9 +9816,9 @@ int main(int argc, char *argv[])
 
 
     ms_filter_call_method(dtmfgen, 
-# 209 "lua_filter_demo.c" 3 4
+# 210 "lua_filter_demo.c" 3 4
                                   (unsigned int)(((((unsigned int)(MS_DTMF_GEN_ID)) & 0xFFFF)<<16) | (((unsigned int)(3))<<8) | (((unsigned int)sizeof(MSDtmfGenCustomTone)) & 0xFF))
-# 209 "lua_filter_demo.c"
+# 210 "lua_filter_demo.c"
                                                          ,
                     (void*)&vars.dtmf_cfg);
 
@@ -9849,51 +9850,50 @@ int main(int argc, char *argv[])
     load_script_body(&vars, lua_filter);
 
     if ( vars.en_rec ) ms_filter_call_method(recorder, 
-# 239 "lua_filter_demo.c" 3 4
+# 240 "lua_filter_demo.c" 3 4
                                                       (unsigned int)(((((unsigned int)(MS_FILE_REC_ID)) & 0xFFFF)<<16) | (((unsigned int)(1))<<8) | (((unsigned int)0) & 0xFF))
-# 239 "lua_filter_demo.c"
+# 240 "lua_filter_demo.c"
                                                                        , 0);
+
 
 
     if (vars.en_gen)
     {
 
-
+        strncpy(vars.dtmf_cfg.tone_name, "sound",
+                sizeof(vars.dtmf_cfg.tone_name));
         vars.dtmf_cfg.duration = 10000;
         vars.dtmf_cfg.amplitude = 1.0;
         vars.dtmf_cfg.frequencies[1]=0;
         vars.dtmf_cfg.amplitude = 1.0;
         vars.dtmf_cfg.interval = 0.;
         vars.dtmf_cfg.repeat_count = 0.;
+        printf("Sound from generator lasts %i ms.\n", vars.dtmf_cfg.duration);
     }
     ms_filter_call_method(dtmfgen, 
-# 253 "lua_filter_demo.c" 3 4
+# 257 "lua_filter_demo.c" 3 4
                                   (unsigned int)(((((unsigned int)(MS_DTMF_GEN_ID)) & 0xFFFF)<<16) | (((unsigned int)(3))<<8) | (((unsigned int)sizeof(MSDtmfGenCustomTone)) & 0xFF))
-# 253 "lua_filter_demo.c"
+# 257 "lua_filter_demo.c"
                                                          ,
                           (void *)&vars.dtmf_cfg);
+
 
 
     printf("Press ENTER to exit.\n ");
     char c=getchar();
     while(c != '\n')
     {
-        if(vars.en_gen)
-        {
-
-            ms_filter_call_method(dtmfgen, 
-# 264 "lua_filter_demo.c" 3 4
-                                          (unsigned int)(((((unsigned int)(MS_DTMF_GEN_ID)) & 0xFFFF)<<16) | (((unsigned int)(3))<<8) | (((unsigned int)sizeof(MSDtmfGenCustomTone)) & 0xFF))
-# 264 "lua_filter_demo.c"
-                                                                 ,
-                    (void*)&vars.dtmf_cfg);
-        }
+        ms_usleep(500000);
         c=getchar();
-        printf("--\n");
     }
-    if (vars.en_rec ) ms_filter_call_method(recorder, 
-# 270 "lua_filter_demo.c" 3 4
-                                                     (unsigned int)(((((unsigned int)(MS_FILE_REC_ID)) & 0xFFFF)<<16) | (((unsigned int)(3))<<8) | (((unsigned int)0) & 0xFF))
-# 270 "lua_filter_demo.c"
-                                                                      , 0);
+    if (vars.en_rec )
+    {
+
+        ms_filter_call_method(recorder, 
+# 272 "lua_filter_demo.c" 3 4
+                                       (unsigned int)(((((unsigned int)(MS_FILE_REC_ID)) & 0xFFFF)<<16) | (((unsigned int)(3))<<8) | (((unsigned int)0) & 0xFF))
+# 272 "lua_filter_demo.c"
+                                                        , 0);
+        printf("File recording was finished.\n");
+    }
 }

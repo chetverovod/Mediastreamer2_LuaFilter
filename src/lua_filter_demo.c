@@ -14,26 +14,26 @@
 /* Подключаем наш фильтр. */
 #include "lua_filter.h"
 
-/*----------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
 /* Переменные состояния приложения. */
 struct _app_vars
 {
     MSDtmfGenCustomTone dtmf_cfg; /* Настройки тестового сигнала генератора. */
     MSFilter* recorder;           /* Указатель на фильтр регистратор. */
     bool_t file_is_open;          /* Флаг того, что файл для записи открыт. */
-    bool_t en_gen;          /* Включить звуковой генератор. */    
-    bool_t en_rec;          /* Включить запись в файл. */    
-    MSFactory *mf;          /* Фабрика фильтров медиастримера. */
-	MSSndCardManager *scm;  /* Менеджер звуковых карт. */
-    char cards_count;       /* Количество доступных звуковых карт. */
-	const char **cards;     /* Список доступных звуковых карт. */
-    char* script_preambula_name;      /* Файл преамбулы  скрипта. */
-    char* script_body_name;      /* Файл основной части скрипта. */
+    bool_t en_gen;                /* Включить звуковой генератор. */    
+    bool_t en_rec;                /* Включить запись в файл. */    
+    MSFactory *mf;                /* Фабрика фильтров медиастримера. */
+	MSSndCardManager *scm;        /* Менеджер звуковых карт. */
+    char cards_count;             /* Количество доступных звуковых карт. */
+	const char **cards;           /* Список доступных звуковых карт. */
+    char* script_preambula_name;  /* Файл преамбулы  скрипта. */
+    char* script_body_name;       /* Файл основной части скрипта. */
 };
 
 typedef struct _app_vars app_vars;
 
-/*----------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
 /* Функция преобразования аргументов командной строки в 
    настройки программы. 
  */
@@ -108,7 +108,8 @@ static void load_script_body(app_vars *v, MSFilter* filter)
     }
     else
     {
-        printf("Script's body <%s> is out of buffer, dropped.\n", v->script_body_name);
+        printf("Script's body <%s> is out of buffer, dropped.\n",
+                v->script_body_name);
     }
 }
 
@@ -238,34 +239,37 @@ int main(int argc, char *argv[])
 
     if ( vars.en_rec ) ms_filter_call_method(recorder, MS_FILE_REC_START, 0);
 
-    /* Если настройка частоты генератора отлична от нуля, то запускаем генератор. */   
+    /* Если настройка частоты генератора отлична от нуля, то запускаем 
+    генератор. */   
     if (vars.en_gen)
     {
         /* Настраиваем структуру, управляющую выходным сигналом генератора. */
-      //  strncpy(vars.dtmf_cfg.tone_name, "busy", sizeof(vars.dtmf_cfg.tone_name));
+        strncpy(vars.dtmf_cfg.tone_name, "sound", 
+                sizeof(vars.dtmf_cfg.tone_name));
         vars.dtmf_cfg.duration = 10000;
         vars.dtmf_cfg.amplitude = 1.0;
         vars.dtmf_cfg.frequencies[1]=0;
         vars.dtmf_cfg.amplitude = 1.0;
         vars.dtmf_cfg.interval = 0.;
         vars.dtmf_cfg.repeat_count = 0.;
+        printf("Sound from generator lasts %i ms.\n", vars.dtmf_cfg.duration);
     }
     ms_filter_call_method(dtmfgen, MS_DTMF_GEN_PLAY_CUSTOM,
                           (void *)&vars.dtmf_cfg);
 
     /* Организуем цикл перезапуска генератора. */
+
     printf("Press ENTER to exit.\n ");
     char c=getchar();
     while(c != '\n')
     {
-        if(vars.en_gen)
-        {
-            /* Включаем звуковой генератор. */
-            ms_filter_call_method(dtmfgen, MS_DTMF_GEN_PLAY_CUSTOM,
-                    (void*)&vars.dtmf_cfg);
-        }
+        ms_usleep(500000);
         c=getchar();
-        printf("--\n");
     }
-    if (vars.en_rec ) ms_filter_call_method(recorder, MS_FILE_REC_CLOSE, 0);
+    if (vars.en_rec ) 
+    {
+        /* Завершаем запись в файл. */
+        ms_filter_call_method(recorder, MS_FILE_REC_CLOSE, 0);
+        printf("File recording was finished.\n");
+    }
 }
