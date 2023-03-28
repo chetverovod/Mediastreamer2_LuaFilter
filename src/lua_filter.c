@@ -189,6 +189,9 @@ while ((im = ms_queue_get(f->inputs[0])) != NULL)
 			  const char *msg_body = lua_tolstring(d->L, 1, &msg_len);
 			  if (msg_body && msg_len)
 			  {
+				  printf("msg_body[0]=%i\n", msg_body[0]);
+				  printf("msg_body[1]=%i\n", msg_body[1]);
+				  printf("msg_len =%lu\n", msg_len);
 				  msg_len = real_size;
 				  out_im = allocb((int)msg_len, 0);
 				  memcpy(out_im->b_wptr, msg_body, msg_len);
@@ -313,7 +316,7 @@ MSFilterDesc lua_filter_desc = {
 MSFilterDesc lua_filter_desc = {
   .id = (MSFilterId) LUA_FILTER_ID,
   .name = "LUA_FILTER",
-  .text = ("A filter that runs a Lua script."),
+  .text = ("A filter that runs a Lua-script."),
   .category = MS_FILTER_OTHER,
   .ninputs = 1,
   .noutputs = 1,
