@@ -788,8 +788,8 @@ main:
 	movl	$0, %esi
 	movq	%rax, %rdi
 	call	ms_filter_link@PLT
-	.loc 1 203 6
-	movq	-168(%rbp), %rdx
+	.loc 1 202 6
+	movq	-128(%rbp), %rdx
 	movq	-152(%rbp), %rax
 	movl	$0, %ecx
 	movl	$0, %esi
@@ -821,6 +821,20 @@ main:
 	movq	%rax, %rdi
 	call	ms_filter_link@PLT
 .L29:
+	.loc 1 218 5
+	movq	-136(%rbp), %rdx
+	movq	-128(%rbp), %rax
+	movl	$0, %ecx
+	movl	$0, %esi
+	movq	%rax, %rdi
+	call	ms_filter_link@PLT
+	.loc 1 219 5
+	movq	-168(%rbp), %rdx
+	movq	-128(%rbp), %rax
+	movl	$0, %ecx
+	movl	$1, %esi
+	movq	%rax, %rdi
+	call	ms_filter_link@PLT
 	.loc 1 223 5
 	movq	-144(%rbp), %rdx
 	leaq	-112(%rbp), %rax

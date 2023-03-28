@@ -9807,8 +9807,8 @@ int main(int argc, char *argv[])
     {
      ms_filter_link(voidsource, 0, dtmfgen, 0);
 
+     ms_filter_link(dtmfgen, 0, tee, 0);
 
-     ms_filter_link(dtmfgen, 0, snd_card_write, 0);
 
     char key='1';
     ms_filter_call_method(dtmfgen, 
@@ -9827,8 +9827,8 @@ int main(int argc, char *argv[])
      ms_filter_link(lua_filter, 0, tee, 0);
     }
 
-
-
+    ms_filter_link(tee, 0, recorder, 0);
+    ms_filter_link(tee, 1, snd_card_write, 0);
 
 
 
