@@ -18,7 +18,6 @@ apt-get install -y \
     gdb \
     pkg-config \
     make \
-    libglib2.0-dev \
     lua5.3 \
     lua5.3-dev \
     liblua5.3 
