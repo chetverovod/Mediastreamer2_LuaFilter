@@ -257,8 +257,6 @@ int main(int argc, char *argv[])
     ms_filter_call_method(dtmfgen, MS_DTMF_GEN_PLAY_CUSTOM,
                           (void *)&vars.dtmf_cfg);
 
-    /* Организуем цикл перезапуска генератора. */
-
     printf("Press ENTER to exit.\n ");
     char c=getchar();
     while(c != '\n')
