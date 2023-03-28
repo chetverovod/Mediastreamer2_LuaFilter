@@ -24,7 +24,7 @@ jobs:
           sudo apt-get install gdb
           
     - name: make
-      run: 
+      run: |
            cd ./src
            make all
     - name: make check
