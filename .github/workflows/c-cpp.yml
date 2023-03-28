@@ -18,8 +18,14 @@ jobs:
           sudo apt-get update
           sudo apt-get install libortp-dev
           sudo apt-get install libmediastreamer-dev
+          sudo apt-get install lua5.3
+          sudo apt-get install lua5.3-dev
+          sudo apt-get install liblua5.3 
           sudo apt-get install gdb
+          
     - name: make
-      run:  make all
+      run: |
+           cd ./src
+           make all
     - name: make check
       run: gdb 
