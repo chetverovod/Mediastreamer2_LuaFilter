@@ -27,5 +27,6 @@ jobs:
       run: |
            cd ./src
            make all
+
     - name: make check
-      run: gdb -ex run --args lua_filter_demo --scb ../scripts/body1.lua  --scp ../scripts/preambula1.lua 
+      run: gdb -ex run --args ./src/lua_filter_demo --scb ../scripts/body1.lua  --scp ../scripts/preambula1.lua 
