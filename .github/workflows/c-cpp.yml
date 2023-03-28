@@ -1,0 +1,25 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install dependencies on ubuntu
+      run: |
+          sudo apt-get update
+          sudo apt-get install libortp-dev
+          sudo apt-get install libmediastreamer-dev
+          sudo apt-get install gdb
+    - name: make
+      run:  make all
+    - name: make check
+      run: gdb 
