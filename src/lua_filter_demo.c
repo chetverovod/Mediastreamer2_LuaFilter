@@ -202,12 +202,13 @@ int main(int argc, char *argv[])
      ms_filter_link(dtmfgen, 0, tee, 0);
      //!!ms_filter_link(lua_filter, 0, tee, 0);
     
-    char key='1';
+   /* char key='1';
     ms_filter_call_method(dtmfgen, MS_DTMF_GEN_PLAY, (void*)&key);
-    /*
+    */
+
     ms_filter_call_method(dtmfgen, MS_DTMF_GEN_PLAY_CUSTOM,
                     (void*)&vars.dtmf_cfg);
-                    */
+    
     }
     else
     {
@@ -241,9 +242,16 @@ int main(int argc, char *argv[])
     if (vars.en_gen)
     {
         /* Настраиваем структуру, управляющую выходным сигналом генератора. */
+      //  strncpy(vars.dtmf_cfg.tone_name, "busy", sizeof(vars.dtmf_cfg.tone_name));
         vars.dtmf_cfg.duration = 10000;
         vars.dtmf_cfg.amplitude = 1.0;
+        vars.dtmf_cfg.frequencies[1]=0;
+        vars.dtmf_cfg.amplitude = 1.0;
+        vars.dtmf_cfg.interval = 0.;
+        vars.dtmf_cfg.repeat_count = 0.;
     }
+    ms_filter_call_method(dtmfgen, MS_DTMF_GEN_PLAY_CUSTOM,
+                          (void *)&vars.dtmf_cfg);
 
     /* Организуем цикл перезапуска генератора. */
     printf("Press ENTER to exit.\n ");

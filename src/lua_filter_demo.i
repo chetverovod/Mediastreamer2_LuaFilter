@@ -9810,15 +9810,16 @@ int main(int argc, char *argv[])
      ms_filter_link(dtmfgen, 0, tee, 0);
 
 
-    char key='1';
+
+
+
+
     ms_filter_call_method(dtmfgen, 
-# 206 "lua_filter_demo.c" 3 4
-                                  (unsigned int)(((((unsigned int)(MS_DTMF_GEN_ID)) & 0xFFFF)<<16) | (((unsigned int)(0))<<8) | (((unsigned int)sizeof(const char)) & 0xFF))
-# 206 "lua_filter_demo.c"
-                                                  , (void*)&key);
-
-
-
+# 209 "lua_filter_demo.c" 3 4
+                                  (unsigned int)(((((unsigned int)(MS_DTMF_GEN_ID)) & 0xFFFF)<<16) | (((unsigned int)(3))<<8) | (((unsigned int)sizeof(MSDtmfGenCustomTone)) & 0xFF))
+# 209 "lua_filter_demo.c"
+                                                         ,
+                    (void*)&vars.dtmf_cfg);
 
     }
     else
@@ -9848,18 +9849,29 @@ int main(int argc, char *argv[])
     load_script_body(&vars, lua_filter);
 
     if ( vars.en_rec ) ms_filter_call_method(recorder, 
-# 238 "lua_filter_demo.c" 3 4
+# 239 "lua_filter_demo.c" 3 4
                                                       (unsigned int)(((((unsigned int)(MS_FILE_REC_ID)) & 0xFFFF)<<16) | (((unsigned int)(1))<<8) | (((unsigned int)0) & 0xFF))
-# 238 "lua_filter_demo.c"
+# 239 "lua_filter_demo.c"
                                                                        , 0);
 
 
     if (vars.en_gen)
     {
 
+
         vars.dtmf_cfg.duration = 10000;
         vars.dtmf_cfg.amplitude = 1.0;
+        vars.dtmf_cfg.frequencies[1]=0;
+        vars.dtmf_cfg.amplitude = 1.0;
+        vars.dtmf_cfg.interval = 0.;
+        vars.dtmf_cfg.repeat_count = 0.;
     }
+    ms_filter_call_method(dtmfgen, 
+# 253 "lua_filter_demo.c" 3 4
+                                  (unsigned int)(((((unsigned int)(MS_DTMF_GEN_ID)) & 0xFFFF)<<16) | (((unsigned int)(3))<<8) | (((unsigned int)sizeof(MSDtmfGenCustomTone)) & 0xFF))
+# 253 "lua_filter_demo.c"
+                                                         ,
+                          (void *)&vars.dtmf_cfg);
 
 
     printf("Press ENTER to exit.\n ");
@@ -9870,9 +9882,9 @@ int main(int argc, char *argv[])
         {
 
             ms_filter_call_method(dtmfgen, 
-# 256 "lua_filter_demo.c" 3 4
+# 264 "lua_filter_demo.c" 3 4
                                           (unsigned int)(((((unsigned int)(MS_DTMF_GEN_ID)) & 0xFFFF)<<16) | (((unsigned int)(3))<<8) | (((unsigned int)sizeof(MSDtmfGenCustomTone)) & 0xFF))
-# 256 "lua_filter_demo.c"
+# 264 "lua_filter_demo.c"
                                                                  ,
                     (void*)&vars.dtmf_cfg);
         }
@@ -9880,8 +9892,8 @@ int main(int argc, char *argv[])
         printf("--\n");
     }
     if (vars.en_rec ) ms_filter_call_method(recorder, 
-# 262 "lua_filter_demo.c" 3 4
+# 270 "lua_filter_demo.c" 3 4
                                                      (unsigned int)(((((unsigned int)(MS_FILE_REC_ID)) & 0xFFFF)<<16) | (((unsigned int)(3))<<8) | (((unsigned int)0) & 0xFF))
-# 262 "lua_filter_demo.c"
+# 270 "lua_filter_demo.c"
                                                                       , 0);
 }
