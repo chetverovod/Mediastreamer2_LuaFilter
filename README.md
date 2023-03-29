@@ -1,5 +1,5 @@
 # Mediastreamer2_LuaFilter
-Implementation of  Mediastrreamer2 filter with Lua-machine inside.
+Implementation of  Mediastreamer2 filter with Lua-machine inside.
 
 You can read prehistory in my Medium blog (English): https://medium.com/gitconnected/whats-mediastreamer2-80fa1c5e617
 or Habr blog (Russian): https://habr.com/ru/post/495702/
