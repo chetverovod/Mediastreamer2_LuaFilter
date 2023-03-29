@@ -161,9 +161,14 @@ while ((im = ms_queue_get(f->inputs[0])) != NULL)
 	  if (!err)
 	  {
 		  int script_body_status = lua_tointeger(d->L, lua_gettop(d->L));
-		  if (script_body_status < 0)
+		  if (script_body_status >= 0)
 		  {
-			  printf("\nFilter <%s> script_body_status %i.\n", f->desc->name,
+			  printf("\nFilter <%s> script_body_status: %i.\n", f->desc->name,
+					 script_body_status);
+		  }
+		  else
+		  {
+			  printf("\nFilter <%s> bad script_body_status: %i.\n", f->desc->name,
 					 script_body_status);
 		  }
 
@@ -186,11 +191,13 @@ while ((im = ms_queue_get(f->inputs[0])) != NULL)
 		  size_t msg_len = 0;
 		  if (lua_type(d->L, lua_gettop(d->L)) == LUA_TSTRING)
 		  {
-			  const char *msg_body = lua_tolstring(d->L, 1, &msg_len);
+			  const char *msg_body = lua_tolstring(d->L, -1, &msg_len);
 			  if (msg_body && msg_len)
 			  {
 				  printf("msg_body[0]=%i\n", msg_body[0]);
 				  printf("msg_body[1]=%i\n", msg_body[1]);
+				  printf("msg_body[2]=%i\n", msg_body[2]);
+				  printf("msg_body[3]=%i\n", msg_body[3]);
 				  printf("msg_len =%lu\n", msg_len);
 				  msg_len = real_size;
 				  out_im = allocb((int)msg_len, 0);

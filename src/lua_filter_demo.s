@@ -799,14 +799,14 @@ main:
 	movl	$0, %esi
 	movq	%rax, %rdi
 	call	ms_filter_link@PLT
-	.loc 1 204 6
+	.loc 1 203 6
 	movq	-128(%rbp), %rdx
 	movq	-144(%rbp), %rax
 	movl	$0, %ecx
 	movl	$0, %esi
 	movq	%rax, %rdi
 	call	ms_filter_link@PLT
-	.loc 1 206 5
+	.loc 1 205 6
 	leaq	-112(%rbp), %rdx
 	movq	-152(%rbp), %rax
 	movl	$983840, %esi
@@ -814,14 +814,14 @@ main:
 	call	ms_filter_call_method@PLT
 	jmp	.L29
 .L28:
-	.loc 1 212 6
+	.loc 1 210 6
 	movq	-144(%rbp), %rdx
 	movq	-176(%rbp), %rax
 	movl	$0, %ecx
 	movl	$0, %esi
 	movq	%rax, %rdi
 	call	ms_filter_link@PLT
-	.loc 1 213 6
+	.loc 1 211 6
 	movq	-128(%rbp), %rdx
 	movq	-144(%rbp), %rax
 	movl	$0, %ecx
@@ -829,32 +829,32 @@ main:
 	movq	%rax, %rdi
 	call	ms_filter_link@PLT
 .L29:
-	.loc 1 216 5
+	.loc 1 214 5
 	movq	-136(%rbp), %rdx
 	movq	-128(%rbp), %rax
 	movl	$0, %ecx
 	movl	$0, %esi
 	movq	%rax, %rdi
 	call	ms_filter_link@PLT
-	.loc 1 217 5
+	.loc 1 215 5
 	movq	-168(%rbp), %rdx
 	movq	-128(%rbp), %rax
 	movl	$0, %ecx
 	movl	$1, %esi
 	movq	%rax, %rdi
 	call	ms_filter_link@PLT
-	.loc 1 221 5
+	.loc 1 219 5
 	movq	-144(%rbp), %rdx
 	leaq	-112(%rbp), %rax
 	movq	%rdx, %rsi
 	movq	%rax, %rdi
 	call	load_script_preambula
-	.loc 1 225 13
+	.loc 1 223 13
 	movzbl	-71(%rbp), %eax
-	.loc 1 225 8
+	.loc 1 223 8
 	testb	%al, %al
 	je	.L30
-	.loc 1 227 5
+	.loc 1 225 5
 	movq	-160(%rbp), %rdx
 	movq	-120(%rbp), %rax
 	movq	%rdx, %rsi
@@ -862,64 +862,64 @@ main:
 	call	ms_ticker_attach@PLT
 	jmp	.L31
 .L30:
-	.loc 1 231 5
+	.loc 1 229 5
 	movq	-176(%rbp), %rdx
 	movq	-120(%rbp), %rax
 	movq	%rdx, %rsi
 	movq	%rax, %rdi
 	call	ms_ticker_attach@PLT
 .L31:
-	.loc 1 234 5
+	.loc 1 232 5
 	movq	-144(%rbp), %rdx
 	leaq	-112(%rbp), %rax
 	movq	%rdx, %rsi
 	movq	%rax, %rdi
 	call	load_script_body
-	.loc 1 236 14
+	.loc 1 234 14
 	movzbl	-70(%rbp), %eax
-	.loc 1 236 8
+	.loc 1 234 8
 	testb	%al, %al
 	je	.L32
-	.loc 1 236 24 discriminator 1
+	.loc 1 234 24 discriminator 1
 	movq	-136(%rbp), %rax
 	movl	$0, %edx
 	movl	$917760, %esi
 	movq	%rax, %rdi
 	call	ms_filter_call_method@PLT
 .L32:
-	.loc 1 240 13
+	.loc 1 238 13
 	movzbl	-71(%rbp), %eax
-	.loc 1 240 8
+	.loc 1 238 8
 	testb	%al, %al
 	je	.L33
-	.loc 1 243 9
+	.loc 1 241 9
 	leaq	-112(%rbp), %rax
 	movl	$8, %edx
 	leaq	.LC24(%rip), %rcx
 	movq	%rcx, %rsi
 	movq	%rax, %rdi
 	call	strncpy@PLT
-	.loc 1 245 32
+	.loc 1 243 32
 	movl	$10000, -104(%rbp)
+	.loc 1 244 33
+	movss	.LC25(%rip), %xmm0
+	movss	%xmm0, -92(%rbp)
+	.loc 1 245 37
+	movl	$0, -96(%rbp)
 	.loc 1 246 33
 	movss	.LC25(%rip), %xmm0
 	movss	%xmm0, -92(%rbp)
-	.loc 1 247 37
-	movl	$0, -96(%rbp)
-	.loc 1 248 33
-	movss	.LC25(%rip), %xmm0
-	movss	%xmm0, -92(%rbp)
-	.loc 1 249 32
+	.loc 1 247 32
 	movl	$0, -88(%rbp)
-	.loc 1 250 36
+	.loc 1 248 36
 	movl	$0, -84(%rbp)
-	.loc 1 253 9
+	.loc 1 251 9
 	leaq	-112(%rbp), %rdx
 	movq	-152(%rbp), %rax
 	movl	$983840, %esi
 	movq	%rax, %rdi
 	call	ms_filter_call_method@PLT
-	.loc 1 255 9
+	.loc 1 253 9
 	movl	-104(%rbp), %eax
 	movl	%eax, %esi
 	leaq	.LC26(%rip), %rax
@@ -927,47 +927,47 @@ main:
 	movl	$0, %eax
 	call	printf@PLT
 .L33:
-	.loc 1 258 5
+	.loc 1 256 5
 	leaq	.LC27(%rip), %rax
 	movq	%rax, %rdi
 	movl	$0, %eax
 	call	printf@PLT
-	.loc 1 259 12
+	.loc 1 257 12
 	call	getchar@PLT
-	.loc 1 259 10
+	.loc 1 257 10
 	movb	%al, -185(%rbp)
-	.loc 1 260 10
+	.loc 1 258 10
 	jmp	.L34
 .L35:
-	.loc 1 262 9
+	.loc 1 260 9
 	movl	$500000, %edi
 	call	ms_usleep@PLT
-	.loc 1 263 11
+	.loc 1 261 11
 	call	getchar@PLT
-	.loc 1 263 10
+	.loc 1 261 10
 	movb	%al, -185(%rbp)
 .L34:
-	.loc 1 260 13
+	.loc 1 258 13
 	cmpb	$10, -185(%rbp)
 	jne	.L35
-	.loc 1 265 13
+	.loc 1 263 13
 	movzbl	-70(%rbp), %eax
-	.loc 1 265 8
+	.loc 1 263 8
 	testb	%al, %al
 	je	.L36
-	.loc 1 268 9
+	.loc 1 266 9
 	movq	-136(%rbp), %rax
 	movl	$0, %edx
 	movl	$918272, %esi
 	movq	%rax, %rdi
 	call	ms_filter_call_method@PLT
-	.loc 1 269 9
+	.loc 1 267 9
 	leaq	.LC28(%rip), %rax
 	movq	%rax, %rdi
 	call	puts@PLT
 .L36:
 	movl	$0, %eax
-	.loc 1 271 1
+	.loc 1 269 1
 	movq	-8(%rbp), %rdx
 	subq	%fs:40, %rdx
 	je	.L38
@@ -4622,7 +4622,7 @@ main:
 	.uleb128 0x2c
 	.string	"c"
 	.byte	0x1
-	.value	0x103
+	.value	0x101
 	.byte	0xa
 	.long	0xe2
 	.uleb128 0x3

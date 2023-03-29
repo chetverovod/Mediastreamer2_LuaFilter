@@ -9358,9 +9358,14 @@ while ((im = ms_queue_get(f->inputs[0])) !=
                             ),((void *)0))
 # 163 "lua_filter.c"
                                                                  ;
-    if (script_body_status < 0)
+    if (script_body_status >= 0)
     {
-     printf("\nFilter <%s> script_body_status %i.\n", f->desc->name,
+     printf("\nFilter <%s> script_body_status: %i.\n", f->desc->name,
+      script_body_status);
+    }
+    else
+    {
+     printf("\nFilter <%s> bad script_body_status: %i.\n", f->desc->name,
       script_body_status);
     }
 
@@ -9370,39 +9375,39 @@ while ((im = ms_queue_get(f->inputs[0])) !=
     char type_on_top = lua_type(d->L, lua_gettop(d->L));
     printf("Type on top: %i\n", type_on_top);
     if (type_on_top == 
-# 175 "lua_filter.c" 3 4
+# 180 "lua_filter.c" 3 4
                       3
-# 175 "lua_filter.c"
+# 180 "lua_filter.c"
                                  )
     {
      real_size =
       (size_t)
-# 178 "lua_filter.c" 3 4
+# 183 "lua_filter.c" 3 4
              lua_tointegerx(
-# 178 "lua_filter.c"
+# 183 "lua_filter.c"
              d->L
-# 178 "lua_filter.c" 3 4
+# 183 "lua_filter.c" 3 4
              ,(
-# 178 "lua_filter.c"
+# 183 "lua_filter.c"
              lua_gettop(d->L)
-# 178 "lua_filter.c" 3 4
+# 183 "lua_filter.c" 3 4
              ),((void *)0))
-# 178 "lua_filter.c"
+# 183 "lua_filter.c"
                                                   ;
      printf("------- size from lua %lu\n", real_size);
     }
     
-# 181 "lua_filter.c" 3 4
+# 186 "lua_filter.c" 3 4
    lua_settop(
-# 181 "lua_filter.c"
+# 186 "lua_filter.c"
    d->L
-# 181 "lua_filter.c" 3 4
+# 186 "lua_filter.c" 3 4
    , -(
-# 181 "lua_filter.c"
+# 186 "lua_filter.c"
    1
-# 181 "lua_filter.c" 3 4
+# 186 "lua_filter.c" 3 4
    )-1)
-# 181 "lua_filter.c"
+# 186 "lua_filter.c"
                    ;
 
 
@@ -9410,16 +9415,18 @@ while ((im = ms_queue_get(f->inputs[0])) !=
     lua_getglobal(d->L, "lf_data_out");
     size_t msg_len = 0;
     if (lua_type(d->L, lua_gettop(d->L)) == 
-# 187 "lua_filter.c" 3 4
+# 192 "lua_filter.c" 3 4
                                            4
-# 187 "lua_filter.c"
+# 192 "lua_filter.c"
                                                       )
     {
-     const char *msg_body = lua_tolstring(d->L, 1, &msg_len);
+     const char *msg_body = lua_tolstring(d->L, -1, &msg_len);
      if (msg_body && msg_len)
      {
       printf("msg_body[0]=%i\n", msg_body[0]);
       printf("msg_body[1]=%i\n", msg_body[1]);
+      printf("msg_body[2]=%i\n", msg_body[2]);
+      printf("msg_body[3]=%i\n", msg_body[3]);
       printf("msg_len =%lu\n", msg_len);
       msg_len = real_size;
       out_im = allocb((int)msg_len, 0);
@@ -9428,50 +9435,50 @@ while ((im = ms_queue_get(f->inputs[0])) !=
      }
     }
     
-# 201 "lua_filter.c" 3 4
+# 208 "lua_filter.c" 3 4
    lua_settop(
-# 201 "lua_filter.c"
+# 208 "lua_filter.c"
    d->L
-# 201 "lua_filter.c" 3 4
+# 208 "lua_filter.c" 3 4
    , -(
-# 201 "lua_filter.c"
+# 208 "lua_filter.c"
    1
-# 201 "lua_filter.c" 3 4
+# 208 "lua_filter.c" 3 4
    )-1)
-# 201 "lua_filter.c"
+# 208 "lua_filter.c"
                    ;
 
 
     values_on_stack = lua_gettop(d->L);
     
-# 205 "lua_filter.c" 3 4
+# 212 "lua_filter.c" 3 4
    lua_settop(
-# 205 "lua_filter.c"
+# 212 "lua_filter.c"
    d->L
-# 205 "lua_filter.c" 3 4
+# 212 "lua_filter.c" 3 4
    , -(
-# 205 "lua_filter.c"
+# 212 "lua_filter.c"
    values_on_stack
-# 205 "lua_filter.c" 3 4
+# 212 "lua_filter.c" 3 4
    )-1)
-# 205 "lua_filter.c"
+# 212 "lua_filter.c"
                                  ;
    }
    else
    {
     printf("\nFilter <%s> Lua error.\n", f->desc->name);
     const char *answer = 
-# 210 "lua_filter.c" 3 4
+# 217 "lua_filter.c" 3 4
                         lua_tolstring(
-# 210 "lua_filter.c"
+# 217 "lua_filter.c"
                         d->L
-# 210 "lua_filter.c" 3 4
+# 217 "lua_filter.c" 3 4
                         , (
-# 210 "lua_filter.c"
+# 217 "lua_filter.c"
                         lua_gettop(d->L)
-# 210 "lua_filter.c" 3 4
+# 217 "lua_filter.c" 3 4
                         ), ((void *)0))
-# 210 "lua_filter.c"
+# 217 "lua_filter.c"
                                                             ;
     if (answer)
     {
@@ -9488,9 +9495,9 @@ while ((im = ms_queue_get(f->inputs[0])) !=
   {
 
     if ((!disabled_out) && (f->outputs[i] != 
-# 225 "lua_filter.c" 3 4
+# 232 "lua_filter.c" 3 4
                                             ((void *)0)
-# 225 "lua_filter.c"
+# 232 "lua_filter.c"
                                                 ))
     if (p)
      ms_queue_put(f->outputs[i], dupmsg(p));
@@ -9508,27 +9515,27 @@ control_stop(MSFilter *f, void *arg)
 {
  ControlData *d = (ControlData *)f->data;
  d->stopped = 
-# 241 "lua_filter.c" 3 4
+# 248 "lua_filter.c" 3 4
              1
-# 241 "lua_filter.c"
+# 248 "lua_filter.c"
                  ;
  if (arg)
  {
  if (d->script_code)
   
-# 245 "lua_filter.c" 3 4
+# 252 "lua_filter.c" 3 4
  ortp_free
-# 245 "lua_filter.c"
+# 252 "lua_filter.c"
         (d->script_code);
  d->script_code = 
-# 246 "lua_filter.c" 3 4
+# 253 "lua_filter.c" 3 4
                  ortp_strdup
-# 246 "lua_filter.c"
+# 253 "lua_filter.c"
                           (*(char **)arg);
  
-# 247 "lua_filter.c" 3 4
+# 254 "lua_filter.c" 3 4
 ortp_free
-# 247 "lua_filter.c"
+# 254 "lua_filter.c"
        (*(char **)arg);
  }
  return 0;
@@ -9542,27 +9549,27 @@ control_run(MSFilter *f, void *arg)
 {
  ControlData *d = (ControlData *)f->data;
  d->stopped = 
-# 259 "lua_filter.c" 3 4
+# 266 "lua_filter.c" 3 4
              0
-# 259 "lua_filter.c"
+# 266 "lua_filter.c"
                   ;
  if (arg)
  {
  if (d->script_code)
   
-# 263 "lua_filter.c" 3 4
+# 270 "lua_filter.c" 3 4
  ortp_free
-# 263 "lua_filter.c"
+# 270 "lua_filter.c"
         (d->script_code);
  d->script_code = 
-# 264 "lua_filter.c" 3 4
+# 271 "lua_filter.c" 3 4
                  ortp_strdup
-# 264 "lua_filter.c"
+# 271 "lua_filter.c"
                           (*(char **)arg);
  
-# 265 "lua_filter.c" 3 4
+# 272 "lua_filter.c" 3 4
 ortp_free
-# 265 "lua_filter.c"
+# 272 "lua_filter.c"
        (*(char **)arg);
  }
  return 0;
@@ -9575,27 +9582,27 @@ control_set_preamble(MSFilter *f, void *arg)
 {
  ControlData *d = (ControlData *)f->data;
  d->preabmle_was_run = 
-# 276 "lua_filter.c" 3 4
+# 283 "lua_filter.c" 3 4
                       0
-# 276 "lua_filter.c"
+# 283 "lua_filter.c"
                            ;
  if (arg)
  {
  if (d->script_preamble)
   
-# 280 "lua_filter.c" 3 4
+# 287 "lua_filter.c" 3 4
  ortp_free
-# 280 "lua_filter.c"
+# 287 "lua_filter.c"
         (d->script_preamble);
  d->script_preamble = 
-# 281 "lua_filter.c" 3 4
+# 288 "lua_filter.c" 3 4
                      ortp_strdup
-# 281 "lua_filter.c"
+# 288 "lua_filter.c"
                               (*(char **)arg);
  
-# 282 "lua_filter.c" 3 4
+# 289 "lua_filter.c" 3 4
 ortp_free
-# 282 "lua_filter.c"
+# 289 "lua_filter.c"
        (*(char **)arg);
  }
  return 0;
@@ -9605,63 +9612,63 @@ ortp_free
 
 static MSFilterMethod control_methods[] = {
   {
-# 290 "lua_filter.c" 3 4
+# 297 "lua_filter.c" 3 4
   (unsigned int)(((((unsigned int)(
-# 290 "lua_filter.c"
+# 297 "lua_filter.c"
   4001
-# 290 "lua_filter.c" 3 4
+# 297 "lua_filter.c" 3 4
   )) & 0xFFFF)<<16) | (((unsigned int)(
-# 290 "lua_filter.c"
+# 297 "lua_filter.c"
   1
-# 290 "lua_filter.c" 3 4
+# 297 "lua_filter.c" 3 4
   ))<<8) | (((unsigned int)sizeof(
-# 290 "lua_filter.c"
+# 297 "lua_filter.c"
   int
-# 290 "lua_filter.c" 3 4
+# 297 "lua_filter.c" 3 4
   )) & 0xFF))
-# 290 "lua_filter.c"
+# 297 "lua_filter.c"
                  , control_stop},
   {
-# 291 "lua_filter.c" 3 4
+# 298 "lua_filter.c" 3 4
   (unsigned int)(((((unsigned int)(
-# 291 "lua_filter.c"
+# 298 "lua_filter.c"
   4001
-# 291 "lua_filter.c" 3 4
+# 298 "lua_filter.c" 3 4
   )) & 0xFFFF)<<16) | (((unsigned int)(
-# 291 "lua_filter.c"
+# 298 "lua_filter.c"
   0
-# 291 "lua_filter.c" 3 4
+# 298 "lua_filter.c" 3 4
   ))<<8) | (((unsigned int)sizeof(
-# 291 "lua_filter.c"
+# 298 "lua_filter.c"
   char
-# 291 "lua_filter.c" 3 4
+# 298 "lua_filter.c" 3 4
   )) & 0xFF))
-# 291 "lua_filter.c"
+# 298 "lua_filter.c"
                 , control_run},
   {
-# 292 "lua_filter.c" 3 4
+# 299 "lua_filter.c" 3 4
   (unsigned int)(((((unsigned int)(
-# 292 "lua_filter.c"
+# 299 "lua_filter.c"
   4001
-# 292 "lua_filter.c" 3 4
+# 299 "lua_filter.c" 3 4
   )) & 0xFFFF)<<16) | (((unsigned int)(
-# 292 "lua_filter.c"
+# 299 "lua_filter.c"
   2
-# 292 "lua_filter.c" 3 4
+# 299 "lua_filter.c" 3 4
   ))<<8) | (((unsigned int)sizeof(
-# 292 "lua_filter.c"
+# 299 "lua_filter.c"
   char
-# 292 "lua_filter.c" 3 4
+# 299 "lua_filter.c" 3 4
   )) & 0xFF))
-# 292 "lua_filter.c"
+# 299 "lua_filter.c"
                          , control_set_preamble},
   {0, 
-# 293 "lua_filter.c" 3 4
+# 300 "lua_filter.c" 3 4
      ((void *)0)
-# 293 "lua_filter.c"
+# 300 "lua_filter.c"
          }
 };
-# 316 "lua_filter.c"
+# 323 "lua_filter.c"
 MSFilterDesc lua_filter_desc = {
   .id = (MSFilterId) 4001,
   .name = "LUA_FILTER",
