@@ -200,12 +200,10 @@ int main(int argc, char *argv[])
     {
      ms_filter_link(voidsource, 0, dtmfgen, 0);
      ms_filter_link(dtmfgen, 0, lua_filter, 0);
-     //!!ms_filter_link(dtmfgen, 0, tee, 0);
      ms_filter_link(lua_filter, 0, tee, 0);
     
-    ms_filter_call_method(dtmfgen, MS_DTMF_GEN_PLAY_CUSTOM,
+     ms_filter_call_method(dtmfgen, MS_DTMF_GEN_PLAY_CUSTOM,
                     (void*)&vars.dtmf_cfg);
-    
     }
     else
     {
