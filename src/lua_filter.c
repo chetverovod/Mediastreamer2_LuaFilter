@@ -141,7 +141,7 @@ while ((im = ms_queue_get(f->inputs[0])) != NULL)
 	  lua_setglobal(d->L, LF_INPUT_EMPTY);
 	  {
 		  /* Кладем блок данных со входа фильтра на стек Lua-машины. */
-		  size_t sz = (size_t)msgdsize(im);
+		  size_t sz = 2 * (size_t)msgdsize(im); /* Размер блока в байтах.*/
 		  lua_pushinteger(d->L, (lua_Integer)sz);
 		  lua_setglobal(d->L, LF_DATA_LEN);
 		  lua_pushlstring(d->L, (const char *)im->b_rptr, sz);
@@ -188,18 +188,19 @@ while ((im = ms_queue_get(f->inputs[0])) != NULL)
 		  /* Извлекаем длинную строку с преобразованными данными входного блока
 		   данных. И пробрасываем его далее. */
 		  lua_getglobal(d->L, LF_DATA_OUT);
-		  size_t msg_len = 0;
+		  size_t str_len = 0;
 		  if (lua_type(d->L, lua_gettop(d->L)) == LUA_TSTRING)
 		  {
-			  const char *msg_body = lua_tolstring(d->L, -1, &msg_len);
-			  if (msg_body && msg_len)
+			  const char *msg_body = lua_tolstring(d->L, -1, &str_len);
+			  if (msg_body && str_len)
 			  {
 				  printf("msg_body[0]=%i\n", msg_body[0]);
 				  printf("msg_body[1]=%i\n", msg_body[1]);
 				  printf("msg_body[2]=%i\n", msg_body[2]);
 				  printf("msg_body[3]=%i\n", msg_body[3]);
-				  printf("msg_len =%lu\n", msg_len);
-				  msg_len = real_size;
+				  printf("str_len =%lu\n", str_len);
+				  size_t msg_len = real_size / 2;
+
 				  out_im = allocb((int)msg_len, 0);
 				  memcpy(out_im->b_wptr, msg_body, msg_len);
 				  out_im->b_wptr = out_im->b_wptr + msg_len;

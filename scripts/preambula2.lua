@@ -20,7 +20,6 @@ end
 
 function append_sample(s, sample_value)
   local v = math.modf(sample_value)   
-  --[[
   if v == nil then
     print("v=nil")
   end
@@ -35,8 +34,6 @@ function append_sample(s, sample_value)
   print(c2)
   print("\n")
   return  s .. string.char(c1, c2)
-  ]]--
-  return "a"
 end 
 
 return preambula_status 
