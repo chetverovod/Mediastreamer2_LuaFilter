@@ -10,9 +10,6 @@ function get_sample(s, sample_index)
   local byte_index = 2*sample_index - 1
   local L = string.byte(s, byte_index)
   local H = string.byte(s, byte_index + 1)
-  print ("byte_index=" .. tostring(byte_index) .. "\n")
-  print ("L=" .. tostring(L) .. "\n")
-  print ("H=" .. tostring(H) .. "\n")
   local v = 256 * H + L
   if (H >= 128) then
     v = - ((~(v - 1)) & 65535)
@@ -31,14 +28,6 @@ function append_sample(s, sample_value)
 
   local H = v // 256
   local L = v - H * 256
-  print("sample_value = " .. tostring(sample_value))
-  print("\n")
-  print("val = " .. tostring(v))
-  print("\n")
-  print(L)
-  print("\n")
-  print(H)
-  print("\n")
   return  s .. string.char(L, H)
 end 
 
