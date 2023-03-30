@@ -9,13 +9,10 @@ end
 
 for i = 1, lf_data_len/2 do
 s = get_sample(lf_data, i)
-s = s * 0.2
-if i == 1 then
-print ("lua short[0] = " ..  tostring(s) .. "\n")
-end
+s = s * math.sin(t * 6.28/6640)
+t = t + 1
 lf_data_out = append_sample(lf_data_out, s)
 end
 
 lf_data_out_len = string.len(lf_data_out)
-print ("lf_data_out_len=" .. tostring(lf_data_out_len) )
 return body_status

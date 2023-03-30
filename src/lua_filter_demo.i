@@ -9794,7 +9794,7 @@ char* get_file(char *filename) {
     fclose(f);
     if ((read_res > 0) && (read_res <= file_size))
     {
-        printf("Script's code <%s>: <\n%s\n> will be loaded to lua-filter.\n",
+        printf("\nScript's code <%s>:\n{\n%s\n}\nwill be loaded to lua-filter.\n\n",
                   filename, buf);
 
         res = buf;

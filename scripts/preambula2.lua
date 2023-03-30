@@ -4,7 +4,7 @@ preambula_status = 0
 body_status = 0 -- Эта переменная будет инкрементироваться в теле скрипта.
 local greetings = 'Hello world from preambula!\n' -- Приветствие.
 print(greetings)
-
+t = 0  
 -------------------------------------------------------------------------------
 function get_sample(s, sample_index) 
   local byte_index = 2*sample_index - 1

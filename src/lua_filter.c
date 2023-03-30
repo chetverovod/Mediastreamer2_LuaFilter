@@ -140,10 +140,6 @@ while ((im = ms_queue_get(f->inputs[0])) != NULL)
 	  lua_pushinteger(d->L, (lua_Integer)input_empty);
 	  lua_setglobal(d->L, LF_INPUT_EMPTY);
 	  {
-
-				  printf("in msg_body[0]=%hhu\n", im->b_rptr[0]);
-				  printf("in msg_body[1]=%hhu\n", im->b_rptr[1]);
-				  printf("in short[0]=%i\n", *(short*)(im->b_rptr));
 		  /* Кладем блок данных со входа фильтра на стек Lua-машины. */
 		  size_t sz = 2 * (size_t)msgdsize(im); /* Размер блока в байтах.*/
 		  lua_pushinteger(d->L, (lua_Integer)sz);
@@ -165,12 +161,7 @@ while ((im = ms_queue_get(f->inputs[0])) != NULL)
 	  if (!err)
 	  {
 		  int script_body_status = lua_tointeger(d->L, lua_gettop(d->L));
-		  if (script_body_status >= 0)
-		  {
-			  printf("\nFilter <%s> script_body_status: %i.\n", f->desc->name,
-					 script_body_status);
-		  }
-		  else
+		  if (script_body_status < 0)
 		  {
 			  printf("\nFilter <%s> bad script_body_status: %i.\n", f->desc->name,
 					 script_body_status);
@@ -180,12 +171,12 @@ while ((im = ms_queue_get(f->inputs[0])) != NULL)
 		  lua_getglobal(d->L, LF_DATA_OUT_LEN);
 		  size_t real_size = 0;
 		  char type_on_top = lua_type(d->L, lua_gettop(d->L));
-		  printf("Type on top: %i\n", type_on_top);
+		   // printf("Type on top: %i\n", type_on_top);
 		  if (type_on_top == LUA_TNUMBER)
 		  {
 			  real_size =
 				  (size_t)lua_tointeger(d->L, lua_gettop(d->L));
-			  printf("------- size from lua %lu\n", real_size);
+			  // printf("------- size from lua %lu\n", real_size);
 		  }
 		  lua_pop(d->L, 1);
 
@@ -198,13 +189,6 @@ while ((im = ms_queue_get(f->inputs[0])) != NULL)
 			  const char *msg_body = lua_tolstring(d->L, -1, &str_len);
 			  if (msg_body && str_len)
 			  {
-				  printf("out msg_body[0]=%hhu\n", msg_body[0]);
-				  printf("out msg_body[1]=%hhu\n", msg_body[1]);
-				  printf("out msg_body[2]=%hhu\n", msg_body[2]);
-				  printf("out msg_body[3]=%hhu\n", msg_body[3]);
-				  printf("out short[0]=%i\n", *(short*)msg_body);
-				  printf("out str_len =%lu\n", str_len);
-				  printf("-----------------------------------------\n");
 				  size_t msg_len = real_size / 2;
 
 				  out_im = allocb((int)msg_len, 0);

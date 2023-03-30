@@ -322,7 +322,7 @@ scan_args:
 	.string	"r"
 	.align 8
 .LC19:
-	.string	"Script's code <%s>: <\n%s\n> will be loaded to lua-filter.\n"
+	.string	"\nScript's code <%s>:\n{\n%s\n}\nwill be loaded to lua-filter.\n\n"
 	.text
 	.globl	get_file
 	.type	get_file, @function
