@@ -9,7 +9,7 @@ end
 
 for i = 1, lf_data_len/2 do
 s = get_sample(lf_data, i)
--- s = s * 0.5
+s = s * 0.2
 if i == 1 then
 print ("lua short[0] = " ..  tostring(s) .. "\n")
 end

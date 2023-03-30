@@ -5,7 +5,7 @@ body_status = 0 -- Эта переменная будет инкрементир
 local greetings = 'Hello world from preambula!\n' -- Приветствие.
 print(greetings)
 
-
+-------------------------------------------------------------------------------
 function get_sample(s, sample_index) 
   local byte_index = 2*sample_index - 1
   local L = string.byte(s, byte_index)
@@ -20,11 +20,9 @@ end
   return v
 end 
 
+-------------------------------------------------------------------------------
 function append_sample(s, sample_value)
-  local v = math.modf(sample_value)   
-  if v == nil then
-    print("v=nil")
-  end
+  local v = math.floor(sample_value + 0.5)   
  
   if v < 0 then
   v = - v 
