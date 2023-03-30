@@ -1,4 +1,5 @@
 /* lua_filter_demo.c  Программа-демонстратор фильтра со встроенной Lua-машиной. */
+#include <sys/stat.h>
 
 /* Подключаем заголовочные файлы фильтров Mediastreamer2. */
 #include <mediastreamer2/mssndcard.h>
@@ -90,25 +91,42 @@ void  scan_args(int argc, char *argv[], app_vars *v)
 }
 
 /*----------------------------------------------------------------------------*/
+/* Функция возвращает текст скрипта, прочитанный из файла. */
+char* get_file(char *filename) {
+    struct stat file_status;
+    if (stat(filename, &file_status) < 0) {
+        return NULL;
+    }
+    char* res = NULL;
+    const size_t file_size  = file_status.st_size;
+    char* buf =  ms_malloc0(file_size + 1);
+    FILE* f = fopen( filename, "r"); 
+    size_t read_res = fread(buf, 1, file_size, f); 
+    fclose(f);
+    if ((read_res > 0) && (read_res <= file_size))
+    {
+        printf("Script's code <%s>: <\n%s\n> will be loaded to lua-filter.\n", 
+                  filename, buf);
+        /* Память выделенная под buf будет освобождена самим методом фильтра. */          
+        res = buf;
+    }
+    return res;
+}
+
+/*----------------------------------------------------------------------------*/
 /* Функция загрузки основной части (тела) скрипта. */
 static void load_script_body(app_vars *v, MSFilter* filter)
 {
     if (!v->script_body_name) return;
-    FILE* f = fopen(v->script_body_name, "r"); 
-    char buf[SCRIPT_SIZE_CONST + 1];
-    memset(buf, 0, SCRIPT_SIZE_CONST + 1);
-    size_t read_res = fread(buf, 1, SCRIPT_SIZE_CONST, f); 
-    fclose(f);
-    if ((read_res > 0) && (read_res <= SCRIPT_SIZE_CONST))
+
+    char *buf = get_file(v->script_body_name);
+    if (buf)
     {
-        printf("Script's body <%s>: <\n%s\n> will be loaded to lua-filter.\n", 
-                  v->script_body_name, buf);
-        char* cpy = ms_strdup (buf); // Эта копия будет затем удалена фильтром.
-        ms_filter_call_method(filter, LUA_FILTER_RUN, &cpy);
+        ms_filter_call_method(filter, LUA_FILTER_RUN, &buf);
     }
     else
     {
-        printf("Script's body <%s> is out of buffer, dropped.\n",
+        printf("Script's body <%s> was not loaded.\n",
                 v->script_body_name);
     }
 }
@@ -118,22 +136,16 @@ static void load_script_body(app_vars *v, MSFilter* filter)
 static void load_script_preambula(app_vars *v, MSFilter* filter)
 {
     if (!v->script_preambula_name) return;
-    FILE* f = fopen(v -> script_preambula_name, "r"); 
-    char buf[SCRIPT_SIZE_CONST + 1];
-    memset(buf, 0, SCRIPT_SIZE_CONST + 1);
-    size_t read_res = fread(buf, 1, SCRIPT_SIZE_CONST, f); 
-    fclose(f);
-    if ((read_res > 0) && (read_res <= SCRIPT_SIZE_CONST))
+
+    char *buf = get_file(v->script_preambula_name);
+    if (buf)
     {
-        printf("Script's preambula <%s>: <\n%s\n> will be loaded to lua-filter.\n", 
-                  v -> script_preambula_name, buf);
-        char* cpy = ms_strdup (buf); // Эта копия будет затем удалена фильтром.
-        ms_filter_call_method(filter, LUA_FILTER_SET_PREAMBLE, &cpy);
+        ms_filter_call_method(filter, LUA_FILTER_SET_PREAMBLE, &buf);
     }
     else
     {
-        printf("Script's preambula <%s> is out of buffer, dropped.\n",
-         v -> script_preambula_name);
+        printf("Script's preambula <%s> was not loaded.\n",
+                 v -> script_preambula_name);
     }
 }
 
@@ -213,11 +225,9 @@ int main(int argc, char *argv[])
     
     ms_filter_link(tee, 0, recorder, 0);
     ms_filter_link(tee, 1, snd_card_write, 0);
-    
 
     /* Устанавливаем преамбулу Lua-фильтра. */
     load_script_preambula(&vars, lua_filter);
-
 
     /* Подключаем источник тактов. */
     if (vars.en_gen)

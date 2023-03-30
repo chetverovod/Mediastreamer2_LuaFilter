@@ -39,9 +39,6 @@
 /* Флаг того, что входная очередь фильтра пуста. */
 #define LF_INPUT_EMPTY_CONST "input_empty"
 
-/* Определяем максимальный размер скрипта и преамбулы. */
-#define SCRIPT_SIZE_CONST 1024
-
 /* Определяем константы фильтра. */ 
 #define LF_DATA             LF_DATA_CONST
 #define LF_DATA_LEN         LF_DATA_LEN_CONST
