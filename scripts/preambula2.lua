@@ -11,9 +11,9 @@ function get_sample(s, sample_index)
   local L = string.byte(s, byte_index)
   local H = string.byte(s, byte_index + 1)
   local v = 256 * H + L
-  if (H >= 128) then
+ -- if (H >= 128) then
     v = - ((~(v - 1)) & 65535)
-end
+--end
   return v
 end 
 
@@ -22,8 +22,8 @@ function append_sample(s, sample_value)
   local v = math.floor(sample_value + 0.5)   
  
   if v < 0 then
-  v = - v 
-  v = ((~v) + 1) & 65535
+    v = - v 
+    v = ((~v) + 1) & 65535
   end
 
   local H = v // 256

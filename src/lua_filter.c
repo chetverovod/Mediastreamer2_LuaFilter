@@ -139,14 +139,12 @@ while ((im = ms_queue_get(f->inputs[0])) != NULL)
 	  bool_t input_empty = ms_queue_empty(f->inputs[0]);
 	  lua_pushinteger(d->L, (lua_Integer)input_empty);
 	  lua_setglobal(d->L, LF_INPUT_EMPTY);
-	  {
-		  /* Кладем блок данных со входа фильтра на стек Lua-машины. */
-		  size_t sz = 2 * (size_t)msgdsize(im); /* Размер блока в байтах.*/
-		  lua_pushinteger(d->L, (lua_Integer)sz);
-		  lua_setglobal(d->L, LF_DATA_LEN);
-		  lua_pushlstring(d->L, (const char *)im->b_rptr, sz);
-	  }
-
+	   /* Кладем блок данных со входа фильтра на стек Lua-машины. */
+	  size_t sz = 2 * (size_t)msgdsize(im); /* Размер блока в байтах.*/
+	  lua_pushinteger(d->L, (lua_Integer)sz);
+	  lua_setglobal(d->L, LF_DATA_LEN);
+	
+	  lua_pushlstring(d->L, (const char *)im->b_rptr, sz);
 	  lua_setglobal(d->L, LF_DATA);
 
 	  /* Удаляем со стека все, что там, возможно, осталось. */
