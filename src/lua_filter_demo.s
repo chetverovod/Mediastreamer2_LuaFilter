@@ -21,7 +21,7 @@
 	.string	"--scb       Full name of containing body of Lua-script file."
 	.align 8
 .LC6:
-	.string	"--gen       Set generator's frequency, Hz."
+	.string	"--gen       Set generator's frequency, Hz. Soundcard input will be ignored."
 	.align 8
 .LC7:
 	.string	"--rec       Make recording to file 'record.wav'."

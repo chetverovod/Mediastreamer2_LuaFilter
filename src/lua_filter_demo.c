@@ -51,7 +51,7 @@ void  scan_args(int argc, char *argv[], app_vars *v)
             printf("--version   Version of application.\n");
             printf("--scp       Full name of containing preambula of Lua-script file.\n");
             printf("--scb       Full name of containing body of Lua-script file.\n");
-            printf("--gen       Set generator's frequency, Hz.\n");
+            printf("--gen       Set generator's frequency, Hz. Soundcard input will be ignored.\n");
             printf("--rec       Make recording to file 'record.wav'.\n");
             exit(0);
         }
