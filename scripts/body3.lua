@@ -9,8 +9,8 @@ end
 
 for i = 1, lf_data_len/2 do
 s = get_sample(lf_data, i)
-if (samples_count > 14000)  and (samples_count < 22000) then
-s = s * math.sin( samples_count * 6.28/6640)
+if (samples_count > 14000)  and (samples_count < 30000) then
+s = s * math.sin( samples_count/8000 * 6.28/400)
 end
 samples_count = samples_count + 1
 lf_data_out = append_sample(lf_data_out, s)

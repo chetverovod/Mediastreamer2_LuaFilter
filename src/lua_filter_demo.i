@@ -9762,7 +9762,7 @@ void scan_args(int argc, char *argv[], app_vars *v)
                          1
 # 87 "lua_filter_demo.c"
                              ;
-            printf("enable recording: %i\n", v -> en_rec);
+            printf("Recording enabled: %i\n", v -> en_rec);
         }
     }
 }
@@ -9978,12 +9978,21 @@ int main(int argc, char *argv[])
 
     load_script_body(&vars, lua_filter);
 
-    if ( vars.en_rec ) ms_filter_call_method(recorder, 
-# 244 "lua_filter_demo.c" 3 4
-                                                      (unsigned int)(((((unsigned int)(MS_FILE_REC_ID)) & 0xFFFF)<<16) | (((unsigned int)(1))<<8) | (((unsigned int)0) & 0xFF))
-# 244 "lua_filter_demo.c"
-                                                                       , 0);
-
+    if ( vars.en_rec )
+    {
+        char* recording_name = "record.raw";
+        printf ("File for recording <%s>.\n", recording_name);
+        ms_filter_call_method(recorder, 
+# 248 "lua_filter_demo.c" 3 4
+                                       (unsigned int)(((((unsigned int)(MS_FILE_REC_ID)) & 0xFFFF)<<16) | (((unsigned int)(0))<<8) | (((unsigned int)sizeof(const char)) & 0xFF))
+# 248 "lua_filter_demo.c"
+                                                       , recording_name );
+        ms_filter_call_method(recorder, 
+# 249 "lua_filter_demo.c" 3 4
+                                       (unsigned int)(((((unsigned int)(MS_FILE_REC_ID)) & 0xFFFF)<<16) | (((unsigned int)(1))<<8) | (((unsigned int)0) & 0xFF))
+# 249 "lua_filter_demo.c"
+                                                        , 0);
+    }
 
 
     if (vars.en_gen)
@@ -10000,9 +10009,9 @@ int main(int argc, char *argv[])
 
 
         ms_filter_call_method(dtmfgen, 
-# 261 "lua_filter_demo.c" 3 4
+# 266 "lua_filter_demo.c" 3 4
                                       (unsigned int)(((((unsigned int)(MS_DTMF_GEN_ID)) & 0xFFFF)<<16) | (((unsigned int)(3))<<8) | (((unsigned int)sizeof(MSDtmfGenCustomTone)) & 0xFF))
-# 261 "lua_filter_demo.c"
+# 266 "lua_filter_demo.c"
                                                              ,
                           (void *)&vars.dtmf_cfg);
         printf("Sound from generator lasts %i ms.\n", vars.dtmf_cfg.duration);
@@ -10019,9 +10028,9 @@ int main(int argc, char *argv[])
     {
 
         ms_filter_call_method(recorder, 
-# 276 "lua_filter_demo.c" 3 4
+# 281 "lua_filter_demo.c" 3 4
                                        (unsigned int)(((((unsigned int)(MS_FILE_REC_ID)) & 0xFFFF)<<16) | (((unsigned int)(3))<<8) | (((unsigned int)0) & 0xFF))
-# 276 "lua_filter_demo.c"
+# 281 "lua_filter_demo.c"
                                                         , 0);
         printf("File recording was finished.\n");
     }

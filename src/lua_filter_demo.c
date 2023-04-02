@@ -85,7 +85,7 @@ void  scan_args(int argc, char *argv[], app_vars *v)
          if (!strcmp(argv[i], "--rec"))
         {
             v -> en_rec = TRUE;
-            printf("enable recording: %i\n", v -> en_rec);
+            printf("Recording enabled: %i\n", v -> en_rec);
         }
     }
 }
@@ -241,8 +241,13 @@ int main(int argc, char *argv[])
 
     load_script_body(&vars, lua_filter);
 
-    if ( vars.en_rec ) ms_filter_call_method(recorder, MS_FILE_REC_START, 0);
-
+    if ( vars.en_rec ) 
+    {
+        char* recording_name = "record.raw";
+        printf ("File for recording <%s>.\n", recording_name);
+        ms_filter_call_method(recorder, MS_FILE_REC_OPEN, recording_name );
+        ms_filter_call_method(recorder, MS_FILE_REC_START, 0);
+    }
     /* Если настройка частоты генератора отлична от нуля, то запускаем 
     генератор. */   
     if (vars.en_gen)
